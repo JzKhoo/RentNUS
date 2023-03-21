@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux'
 import {
   Row,
@@ -20,9 +20,10 @@ const ProductScreen = ({ match }) => {
 
   const productDetails = useSelector(state => state.productDetails)
   const { loading, error, product } = productDetails
+  const { id } = useParams()
 
   useEffect(() => {
-    dispatch(listProductDetails(match.params.id))
+    dispatch(listProductDetails(id))
   }, [dispatch, match])
 
   
