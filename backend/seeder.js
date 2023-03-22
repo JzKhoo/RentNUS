@@ -22,7 +22,7 @@ const importData = async() => {
 
         const adminUser = createUsers[0]._id
 
-        const sampleProducts = products.map(product => {
+        const sampleProducts = products.map((product) => {
             return { ...product, user: adminUser }
         })
 
