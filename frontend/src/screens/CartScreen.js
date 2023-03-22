@@ -44,7 +44,7 @@ const CartScreen = (match, location, history) => {
 
   return (
     <Row>
-      <Col md={2}>
+      <Col md={8}>
         <h1>Shopping Cart</h1>
         {cartItems.length === 0 ? (
           <Message>
@@ -58,7 +58,7 @@ const CartScreen = (match, location, history) => {
                   <Col md={2}>
                     <Image src = {item.image} alt={item.name} fluid rounded/>
                   </Col>
-                  <Col md={3}>
+                  <Col md={2}>
                     <Link to={`/product/${item.product}`}>{item.name}</Link>
                   </Col>
                   <Col md={2}>${item.price}</Col>
@@ -75,7 +75,7 @@ const CartScreen = (match, location, history) => {
                           ))}
                         </Form.Control>
                   </Col>
-                  <Col md={2}>
+                  <Col md={4}>
                     <Button type='button' variant='light' onClick={() => removeFromCartHandler(item.product)}>
                       <i className='fas fa-trash'></i>
                     </Button>
