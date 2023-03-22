@@ -43,7 +43,7 @@ const CartScreen = (match, location, history) => {
   }
 
   return (
-    <Row>
+    <Row className="justify-content-md-center">
       <Col md={8}>
         <h1>Shopping Cart</h1>
         {cartItems.length === 0 ? (
