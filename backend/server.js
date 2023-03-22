@@ -22,4 +22,6 @@ app.get('/api/products/:id', (req, res) => {
 
 const PORT = process.env.PORT || 4000  
 
-app.listen(PORT, console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`)) 
+app.listen(PORT, console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold))
+
+
