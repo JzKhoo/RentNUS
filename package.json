@@ -30,6 +30,7 @@
     "express-async-handler": "^1.2.0",
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.0.2",
+    "react-datepicker": "^4.11.0",
     "react-redux": "^8.0.5",
     "redux": "^4.2.1",
     "redux-devtools-extension": "^2.13.9",
