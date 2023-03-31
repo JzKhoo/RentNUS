@@ -4,29 +4,29 @@ import { Form, Button, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
-import { login } from "../actions/userActions";
 import FormContainer from "../components/FormContainer";
+import { login } from "../actions/userActions";
 
-const LoginScreen = ({ history }) => {
+const LoginScreen = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-  const userLogin = useSelector(state => state.userLogin)
-  const{ loading, error, userInfo } = userLogin
+  const userLogin = useSelector((state) => state.userLogin);
+  const { loading, error, userInfo } = userLogin;
 
-  const location = useLocation()
-  const redirect = location.search ? location.search.split('=')[1] : '/'
+  // modified: location in RRD v6 must be used this way
+  const location = useLocation();
+  const redirect = location.search ? location.search.split("=")[1] : "/";
 
-  const navigate = useNavigate();
-
+  //modified:this is to check if userInfo is not an empty object, it will redirect once userInfo is filled.
   useEffect(() => {
-    if(userInfo) {
-        navigate(redirect)
+    if (userInfo && Object.keys(userInfo).length > 0) {
+      navigate(redirect);
     }
-  }, [navigate, userInfo, redirect])
-
+  }, [navigate, userInfo, redirect]);
 
   const submitHandler = (e) => {
     e.preventDefault()
@@ -34,11 +34,12 @@ const LoginScreen = ({ history }) => {
     dispatch(login(email, password))
   }
 
+
   return (
     <FormContainer>
       <h1>Sign In</h1>
-      {error && <Message variant='danger'>{error}</Message>}
-      {loading && <Loader/>}
+      {error && <Message variant="danger">{error}</Message>}
+      {loading && <Loader />}
       <Form onSubmit={submitHandler}>
         <Form.Group controlId="email">
           <Form.Label>Email Address</Form.Label>
@@ -69,7 +70,7 @@ const LoginScreen = ({ history }) => {
         <Col>
           New Customer?{" "}
           <Link to={redirect ? `/register?redirect=${redirect}` : "/register"}>
-            register
+            Register
           </Link>
         </Col>
       </Row>

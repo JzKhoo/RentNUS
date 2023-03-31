@@ -24,6 +24,7 @@ const authUser = asyncHandler(async (req, res) => {
   }
 });
 
+
 // @desc    Register a new user
 // @route   POST /api/users
 // @access  Public
@@ -105,3 +106,4 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 });
 
 export { authUser, registerUser, getUserProfile, updateUserProfile };
+

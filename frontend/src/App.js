@@ -7,8 +7,10 @@ import HomeScreen from "./screens/HomeScreen";
 import ProductScreen from "./screens/ProductScreen";
 import CartScreen from "./screens/CartScreen";
 import LoginScreen from "./screens/LoginScreen";
+import AddItemScreen from "./screens/AddItemScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import ProfileScreen from "./screens/ProfileScreen";
+
 
 function App() {
   return (
@@ -17,22 +19,13 @@ function App() {
       <main className="py-3">
         <Container>
           <Routes>
-            <Route path="/login" element={<LoginScreen />} />
-          </Routes>
-          <Routes>
-            <Route path="/register" element={<RegisterScreen />} />
-          </Routes>
-          <Routes>
-            <Route path="/profile" element={<ProfileScreen />} />
-          </Routes>
-          <Routes>
+            <Route path="/" element={<HomeScreen />} />
             <Route path="/product/:id" element={<ProductScreen />} />
-          </Routes>
-          <Routes>
             <Route path="/cart/:id?" element={<CartScreen />} />
-          </Routes>
-          <Routes>
-            <Route path="/" element={<HomeScreen />} exact />
+            <Route path="/login" element={<LoginScreen />} />
+            <Route path="/addItem" element={<AddItemScreen />} />
+            <Route path="/register" element={<RegisterScreen />} />
+            <Route path="/profile" element={<ProfileScreen />} />
           </Routes>
         </Container>
       </main>

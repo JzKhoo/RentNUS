@@ -1,3 +1,4 @@
+
 import {
   USER_LOGIN_REQUEST,
   USER_LOGIN_FAIL,
@@ -14,6 +15,7 @@ import {
   USER_UPDATE_PROFILE_FAIL,
 } from "../constants/userConstants";
 import axios from "axios";
+
 
 export const login = (email, password) => async (dispatch) => {
   try {
@@ -49,6 +51,7 @@ export const login = (email, password) => async (dispatch) => {
     });
   }
 };
+
 
 export const logout = () => (dispatch) => {
   localStorage.removeItem("userInfo");
