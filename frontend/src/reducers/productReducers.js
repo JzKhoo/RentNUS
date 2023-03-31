@@ -30,5 +30,5 @@ export const productDetailsReducer = (state = { product: { reviews: [] } }, acti
       return { loading: false, error: action.payload };
     default:
       return state;
-  }
+  }  
 }
