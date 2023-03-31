@@ -10,19 +10,20 @@ const HomeScreen = () => {
   const dispatch = useDispatch();
 
   const productList = useSelector((state) => state.productList); // 2. grab the products from the state and pull out what we want from it
-  const { loading, error, products } = productList; 
+  const { loading, error, products } = productList;
 
   useEffect(() => {
     dispatch(listProducts()); // 1. fire off action to get products
   }, [dispatch]);
 
-  return (  //3. display in output
+  return (
+    //3. display in output
     <>
       <h1>Latest Products</h1>
       {loading ? (
-        <Loader/>
+        <Loader />
       ) : error ? (
-        <Message variant='danger'>{error}</Message>
+        <Message variant="danger">{error}</Message>
       ) : (
         <Row>
           {products.map((product) => (
