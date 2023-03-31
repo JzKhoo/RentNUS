@@ -5,15 +5,17 @@ import Product from "../components/Product";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { listProducts } from "../actions/productActions";
+import { listItems } from "../actions/itemActions";
+import Item from "../components/Item";
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
 
-  const productList = useSelector((state) => state.productList); // 2. grab the products from the state and pull out what we want from it
-  const { loading, error, products } = productList;
+  const itemList = useSelector((state) => state.itemList); // 2. grab the products from the state and pull out what we want from it
+  const { loading, error, items } = itemList;
 
   useEffect(() => {
-    dispatch(listProducts()); // 1. fire off action to get products
+    dispatch(listItems()); // 1. fire off action to get products
   }, [dispatch]);
 
   return (
@@ -26,9 +28,9 @@ const HomeScreen = () => {
         <Message variant="danger">{error}</Message>
       ) : (
         <Row>
-          {products.map((product) => (
-            <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
-              <Product product={product} />
+          {items.map((item) => (
+            <Col key={item._id} sm={12} md={6} lg={4} xl={3}>
+              <Item item={item} />
             </Col>
           ))}
         </Row>
