@@ -34,7 +34,6 @@ const addItem = asyncHandler(async (req, res) => {
   const {
     owner,
     name,
-    image,
     brand,
     category,
     description,
@@ -42,6 +41,8 @@ const addItem = asyncHandler(async (req, res) => {
     startDate,
     endDate,
   } = req.body;
+
+  const image = req.file.path;
 
   //item doesnt have to be unique
 

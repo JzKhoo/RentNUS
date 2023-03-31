@@ -53,133 +53,32 @@ export const listItemDetails = (id) => async (dispatch) => {
   }
 };
 
-export const addItem =
-  (
-    owner,
-    name,
-    image,
-    brand,
-    category,
-    description,
-    pricePerDay,
-    startDate,
-    endDate
-  ) =>
-  async (dispatch) => {
-    try {
-      dispatch({ type: ITEM_ADD_REQUEST });
+export const addItem = (formData) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: ITEM_ADD_REQUEST });
 
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
+    const {
+      userLogin: { userInfo },
+    } = getState();
 
-      const { data } = await axios.post(
-        "/api/items",
-        {
-          owner,
-          name,
-          image,
-          brand,
-          category,
-          description,
-          pricePerDay,
-          startDate,
-          endDate,
-        },
-        config
-      );
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
 
-      dispatch({
-        type: ITEM_ADD_SUCCESS,
-        payload: data,
-      });
+    const { data } = await axios.post("/api/items", formData, config);
 
-      //do i really need this? probably not..
-      localStorage.setItem("itemInfo", JSON.stringify(data));
-    } catch (error) {
-      dispatch({
-        type: ITEM_ADD_FAIL,
-        payload:
-          error.response && error.response.data.message
-            ? error.response.data.message
-            : error.message,
-      });
-    }
-  };
-
-// export const addItem =
-// (
-//   owner,
-//   name,
-//   image,
-//   brand,
-//   category,
-//   description,
-//   pricePerDay,
-//   startDate,
-//   endDate
-// ) =>
-// async (dispatch) => {
-//   try {
-//     // Validate input parameters
-//     if (
-//       !owner ||
-//       !validator.isString(owner) ||
-//       !name ||
-//       !validator.isString(name) ||
-//       !image ||
-//       !validator.isURL(image) ||
-//       !brand ||
-//       !validator.isString(brand) ||
-//       !category ||
-//       !validator.isString(category) ||
-//       !description ||
-//       !validator.isString(description) ||
-//       !pricePerDay ||
-//       !validator.isFloat(pricePerDay) ||
-//       !startDate ||
-//       !validator.isISO8601(startDate) ||
-//       !endDate ||
-//       !validator.isISO8601(endDate)
-//     ) {
-//       throw new Error("Invalid input parameters");
-//     }
-
-//     dispatch({ type: ITEM_ADD_REQUEST });
-
-//     const config = {
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//     };
-
-//     const { data } = await axios.post(
-//       "/api/items",
-//       {
-//         owner,
-//         name,
-//         image,
-//         brand,
-//         category,
-//         description,
-//         pricePerDay,
-//         startDate,
-//         endDate,
-//       },
-//       config
-//     );
-
-//     dispatch({
-//       type: ITEM_ADD_SUCCESS,
-//       payload: data,
-//     });
-//   } catch (error) {
-//     dispatch({
-//       type: ITEM_ADD_FAIL,
-//       payload:
-//         error.response && error.response.data.message
-//           ? error.response.data.message
-//           : error.message,
-//     });
+    dispatch({ type: ITEM_ADD_SUCCESS, payload: data });
+    localStorage.setItem("itemInfo", JSON.stringify(data));
+  } catch (error) {
+    dispatch({
+      type: ITEM_ADD_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};

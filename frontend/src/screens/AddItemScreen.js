@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, Alert } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
@@ -8,18 +8,72 @@ import FormContainer from "../components/FormContainer";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { addItem } from "../actions/itemActions";
+import { useDropzone } from "react-dropzone";
+
+const MyDropzone = ({ onFileSelect }) => {
+  const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
+    accept: "image/jpeg, image/png",
+    maxFiles: 1,
+    onDrop: (acceptedFiles) => {
+      onFileSelect(acceptedFiles[0]);
+    },
+  });
+
+  const files = acceptedFiles.map((file) => (
+    <li key={file.path}>
+      {file.path} - {file.size} bytes
+    </li>
+  ));
+
+  return (
+    <div {...getRootProps({ className: "dropzone" })}>
+      <input {...getInputProps()} />
+      <p>
+        Drag 'n' drop some files here, or click to select files (.jpg or .png
+        only)
+      </p>
+      <ul>{files}</ul>
+      <style jsx>{`
+        .dropzone {
+          border: 2px dashed #ccc;
+          border-radius: 5px;
+          padding: 20px;
+          margin-bottom: 20px;
+        }
+        .dropzone p {
+          margin: 0;
+          font-size: 16px;
+          font-weight: bold;
+          color: #555;
+        }
+        .dropzone ul {
+          list-style: none;
+          margin: 0;
+          padding: 0;
+        }
+        .dropzone li {
+          margin-top: 10px;
+          font-size: 14px;
+          color: #555;
+        }
+      `}</style>
+    </div>
+  );
+};
 
 const AddItemScreen = () => {
   const navigate = useNavigate();
   const [owner, setOwner] = useState("");
   const [name, setName] = useState("");
-  const [image, setImage] = useState("");
+  // const [image, setImage] = useState("");
   const [brand, setBrand] = useState("");
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
   const [pricePerDay, setPricePerDay] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [showMessage, setShowMessage] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -50,25 +104,37 @@ const AddItemScreen = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(
-      addItem(
-        owner,
-        name,
-        image,
-        brand,
-        category,
-        description,
-        pricePerDay,
-        startDate,
-        endDate
-      )
-    );
-    console.log("item Added");
+    const formData = new FormData();
+    formData.append("owner", owner);
+    formData.append("name", name);
+    formData.append("image", selectedFile, selectedFile.name); // Updated line
+    formData.append("brand", brand);
+    formData.append("category", category);
+    formData.append("description", description);
+    formData.append("pricePerDay", pricePerDay);
+    formData.append("startDate", startDate);
+    formData.append("endDate", endDate);
+    dispatch(addItem(formData));
+    console.log("item dispatched");
+    setShowMessage(true);
+    setTimeout(() => {
+      setShowMessage(false);
+      navigate("/");
+    }, 3000);
   };
 
   return (
     <FormContainer>
       <h1>Add an Item</h1>
+      {showMessage && (
+        <Alert
+          variant="success"
+          onClose={() => setShowMessage(false)}
+          dismissible
+        >
+          Item added successfully
+        </Alert>
+      )}
       {error && <Message variant="danger">{error}</Message>}
       {loading && <Loader />}
       <Form onSubmit={submitHandler}>
@@ -83,13 +149,9 @@ const AddItemScreen = () => {
         </Form.Group>
 
         <Form.Group controlId="image">
-          <Form.Label>Image URL</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Enter URL of Image"
-            value={image}
-            onChange={(e) => setImage(e.target.value)}
-          ></Form.Control>
+          <Form.Label>Image</Form.Label>
+          {/* <MyDropzone /> */}
+          <MyDropzone onFileSelect={setSelectedFile} /> {/* Updated */}
         </Form.Group>
 
         <Form.Group controlId="brand">
