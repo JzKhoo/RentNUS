@@ -19,6 +19,7 @@ const importData = async () => {
     await Order.deleteMany();
     await Product.deleteMany();
     await User.deleteMany();
+    await Item.deleteMany();
 
     const createdUsers = await User.insertMany(users);
 
@@ -50,6 +51,7 @@ const destroyData = async () => {
     await Order.deleteMany();
     await Product.deleteMany();
     await User.deleteMany();
+    await Item.deleteMany();
 
     console.log("Data Destroyed!".red.inverse);
     process.exit();
