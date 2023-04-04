@@ -16,10 +16,10 @@ const orderSchema = mongoose.Schema(
         product: {
           type: mongoose.Schema.Types.ObjectId,
           required: true,
-          ref: "Product",
+          ref: "Item",
         },
       },
-    ],
+    ], 
     shippingAddress: {
       address: { type: String, required: true },
       city: { type: String, required: true },

@@ -2,10 +2,10 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import colors from "colors";
 import users from "./data/users.js";
-import products from "./data/products.js";
+// import products from "./data/products.js";
 import items from "./data/items.js";
 import User from "./models/userModel.js";
-import Product from "./models/productModel.js";
+// import Product from "./models/productModel.js";
 import Item from "./models/itemModel.js";
 import Order from "./models/orderModel.js";
 import connectDB from "./config/db.js";
@@ -17,7 +17,7 @@ connectDB();
 const importData = async () => {
   try {
     await Order.deleteMany();
-    await Product.deleteMany();
+   // await Product.deleteMany();
     await User.deleteMany();
     await Item.deleteMany();
 
@@ -25,11 +25,11 @@ const importData = async () => {
 
     const adminUser = createdUsers[0]._id;
 
-    const sampleProducts = products.map((product) => {
+    /* const sampleProducts = products.map((product) => {
       return { ...product, user: adminUser };
     });
 
-    await Product.insertMany(sampleProducts);
+    await Product.insertMany(sampleProducts); */
 
     // currently it is adminUser but need to change eventually..
     const sampleItems = items.map((item) => {
@@ -49,7 +49,7 @@ const importData = async () => {
 const destroyData = async () => {
   try {
     await Order.deleteMany();
-    await Product.deleteMany();
+   // await Product.deleteMany();
     await User.deleteMany();
     await Item.deleteMany();
 

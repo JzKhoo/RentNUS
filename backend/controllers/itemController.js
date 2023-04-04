@@ -6,13 +6,13 @@ import Item from "../models/itemModel.js";
 // @access Public
 
 const getItems = asyncHandler(async (req, res) => {
-  const items = await Item.find({});
+  const items = await Item.find({}); 
 
   res.json(items);
 });
 
 // @desc fetch rental item by id
-// @route GET /api/items/:id
+// @route GET /api/items/:id 
 // @access Public
 
 const getItemsById = asyncHandler(async (req, res) => {
