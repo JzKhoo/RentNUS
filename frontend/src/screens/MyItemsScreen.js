@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate, useParams} from "react-router-dom";
-import { Table, Row, Col, Image } from 'react-bootstrap'
+import { Table, Row, Col, Image, ListGroupItem, Button } from 'react-bootstrap'
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
@@ -33,10 +33,23 @@ const MyItemsScreen = () => {
     dispatch(listItems())
   }, [dispatch, userInfo]);
 
+  const createItemhandler = () => {
+    navigate('/addItem')
+  }
+
   return (
     <Row>
       <Col>
         <h2>My Items</h2>
+        <ListGroupItem>
+          <Button
+            onClick={createItemhandler}
+            className="btn-block"
+            type="button"
+          >
+            Add an Item
+          </Button>
+        </ListGroupItem>
         {loading ? (
           <Loader />
         ) : error ? (

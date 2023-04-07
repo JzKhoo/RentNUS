@@ -136,7 +136,6 @@ const AddItemScreen = () => {
         </Alert>
       )}
       {error && <Message variant="danger">{error}</Message>}
-      {loading && <Loader />}
       <Form onSubmit={submitHandler}>
         <Form.Group controlId="name">
           <Form.Label>Name of Item</Form.Label>
