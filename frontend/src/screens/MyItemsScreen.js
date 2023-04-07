@@ -1,13 +1,14 @@
 import React, { useEffect } from "react";
-import { useNavigate} from "react-router-dom";
+import { useNavigate, useParams} from "react-router-dom";
 import { Table, Row, Col, Image } from 'react-bootstrap'
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
-import { listProducts } from "../actions/productActions";
+//import { listProducts } from "../actions/productActions";
+import { listItems } from "../actions/itemActions";
 
 const MyItemsScreen = () => {
-
+  // const { keyword, pageNumber } = useParams();
   const dispatch = useDispatch();
 
   const userLogin = useSelector((state) => state.userLogin);
@@ -17,8 +18,10 @@ const MyItemsScreen = () => {
 //   const orderListMy = useSelector((state) => state.orderListMy)
 //   const { loading: loadingOrders, error: errorOrders, orders } = orderListMy
 
-  const productList = useSelector((state) => state.productList); //using productList for now before merge with andre's work
-  const { loading, error, products } = productList; 
+  const itemList = useSelector((state) => state.itemList); //using productList for now before merge with andre's work
+  const { loading, error, items, page, pages } = itemList; 
+  
+  console.log(itemList)
 
   const navigate = useNavigate();
 
@@ -27,8 +30,8 @@ const MyItemsScreen = () => {
       navigate("/login");
       // if not logged in 
     }
-    dispatch(listProducts())
-  }, [dispatch, navigate, userInfo]);
+    dispatch(listItems())
+  }, [dispatch, userInfo]);
 
   return (
     <Row>
@@ -55,14 +58,14 @@ const MyItemsScreen = () => {
               </tr>
             </thead>
             <tbody>
-              {products.map((item) => (
+                {items.map((item) => (
                 <tr key={item._id}>
                   <td>{item.name}</td>
                   <td><Image src={item.image} alt={item.name} fluid /></td>
                   <td>{item.brand}</td>
                   <td>{item.category}</td>
                   <td>{item.description}</td>
-                  <td>{item.reviews.map((review)=> (<td>{review}</td>))}</td>
+                  <td>{item.reviews ? item.reviews.map((review)=> (<td>{review}</td>)) : 0}</td>
                   <td>{item.rating}</td>
                   <td>{item.numReviews}</td>
                   <td>{item.price}</td>

@@ -52,6 +52,7 @@ if (!order) {
   }, [success])
 
   const placeOrderHandler = () => {
+    
     dispatch(
       createOrder({
         orderItems: cart.cartItems,
@@ -105,7 +106,7 @@ if (!order) {
                           />
                         </Col>
                         <Col>
-                          <Link to={`/product/${item.product}`}>
+                          <Link to={`/item/${item.item}`}>
                             {item.name}
                           </Link>
                         </Col>
