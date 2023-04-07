@@ -11,12 +11,11 @@ import {
   ListGroupItem,
   Form,
 } from "react-bootstrap";
-// import Rating from "../components/Rating";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { listItemDetails } from "../actions/itemActions";
 
-const ItemScreen = ({ match }) => {
+const ItemScreen = () => {
   const [qty, setQty] = useState(1);
 
   const dispatch = useDispatch();
@@ -27,9 +26,8 @@ const ItemScreen = ({ match }) => {
   const { id } = useParams();
 
   useEffect(() => {
-    console.log(id); // add this line
     dispatch(listItemDetails(id));
-  }, [dispatch, match]);
+  }, [dispatch, id]);
 
   const addToCartHandler = () => {
     navigate(`/cart/${id}?qty=${qty}`);
@@ -37,7 +35,6 @@ const ItemScreen = ({ match }) => {
 
   return (
     <>
-      {console.log(item)}
       <Link className="btn btn-light my-3" to="/">
         Go Back
       </Link>
@@ -47,9 +44,6 @@ const ItemScreen = ({ match }) => {
         <Message variant="danger">{error}</Message>
       ) : (
         <Row>
-          {/* <Col md={6}>
-            <Card.Img src={item.image} alt={item.name} />
-          </Col> */}
           <Col md={3}>
             <ListGroup variant="flush">
               {item ? (
@@ -59,7 +53,17 @@ const ItemScreen = ({ match }) => {
                   </ListGroupItem>
                   <ListGroupItem>Price/Day: $ {item.pricePerDay}</ListGroupItem>
                   <ListGroupItem>Description: {item.description}</ListGroupItem>
-                  <ListGroupItem>Owner: {item.owner}</ListGroupItem>
+                  {item && item.owner && (
+                    <Link
+                      className="btn btn-light my-3"
+                      to={{
+                        pathname: "/displayuserprofile",
+                        state: { owner: item.owner },
+                      }}
+                    >
+                      View Owner
+                    </Link>
+                  )}
                 </>
               ) : (
                 <Message variant="danger">Item not found</Message>

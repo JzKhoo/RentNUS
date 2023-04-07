@@ -8,7 +8,7 @@ import mongoose from "mongoose";
 //   },
 //   {
 //     timestamps: true,
-//   }
+//   } 
 // ); 
 
 const itemSchema = mongoose.Schema( 

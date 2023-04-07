@@ -11,6 +11,8 @@ import LoginScreen from "./screens/LoginScreen";
 import AddItemScreen from "./screens/AddItemScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import ProfileScreen from "./screens/ProfileScreen";
+import DisplayUserProfileScreen from "./screens/DisplayUserProfileScreen";
+
 
 
 function App() {
@@ -27,6 +29,8 @@ function App() {
             <Route path="/addItem" element={<AddItemScreen />} />
             <Route path="/register" element={<RegisterScreen />} />
             <Route path="/profile" element={<ProfileScreen />} />
+            <Route path="/displayuserprofile" element={<DisplayUserProfileScreen />} />
+            
           </Routes>
         </Container>
       </main>
