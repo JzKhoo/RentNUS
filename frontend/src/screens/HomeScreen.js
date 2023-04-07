@@ -7,16 +7,20 @@ import { listItems } from "../actions/itemActions";
 import Item from "../components/Item";
 // import Product from "../components/Product";
 // import { listProducts } from "../actions/productActions";
+import { useParams } from "react-router-dom";
+import Paginate from "../components/Paginate";
 
 const HomeScreen = () => {
+  const { keyword, pageNumber } = useParams();
+
   const dispatch = useDispatch();
 
   const itemList = useSelector((state) => state.itemList); // 2. grab the products from the state and pull out what we want from it
-  const { loading, error, items } = itemList;
+  const { loading, error, items, page, pages } = itemList; 
 
   useEffect(() => {
-    dispatch(listItems()); // 1. fire off action to get products
-  }, [dispatch]);
+    dispatch(listItems(keyword, pageNumber)); // 1. fire off action to get products
+  }, [dispatch, keyword, pageNumber]);
 
   return (
     //3. display in output
@@ -27,6 +31,7 @@ const HomeScreen = () => {
       ) : error ? (
         <Message variant="danger">{error}</Message>
       ) : (
+        <>
         <Row>
           {items.map((item) => (
             <Col key={item._id} sm={12} md={6} lg={4} xl={3}>
@@ -34,6 +39,8 @@ const HomeScreen = () => {
             </Col>
           ))}
         </Row>
+        <Paginate pages={pages} page={page} keyword={keyword ? keyword : ''}/>
+        </>
       )}
     </>
   );
