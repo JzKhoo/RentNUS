@@ -5,25 +5,29 @@ import Item from "../models/itemModel.js";
 // @route GET /api/items
 // @access Public
 
-const getItems = asyncHandler(async(req, res) => {
-  const pageSize = 5
-  const page = Number(req.query.pageNumber) || 1
+const getItems = asyncHandler(async (req, res) => {
+  const pageSize = 5;
+  const page = Number(req.query.pageNumber) || 1;
 
-  const keyword = req.query.keyword ? {
-      name: {
+  const keyword = req.query.keyword
+    ? {
+        name: {
           $regex: req.query.keyword,
-          $options: 'i'
+          $options: "i",
+        },
       }
-  } : {}
+    : {};
 
-  const count = await Item.countDocuments({...keyword})
-  const items = await Item.find({...keyword}).limit(pageSize).skip(pageSize * (page - 1))
+  const count = await Item.countDocuments({ ...keyword });
+  const items = await Item.find({ ...keyword })
+    .limit(pageSize)
+    .skip(pageSize * (page - 1));
 
-  res.json({items, page, pages: Math.ceil(count / pageSize)})
-})
+  res.json({ items, page, pages: Math.ceil(count / pageSize) });
+});
 
 // @desc fetch rental item by id
-// @route GET /api/items/:id 
+// @route GET /api/items/:id
 // @access Public
 
 const getItemsById = asyncHandler(async (req, res) => {
@@ -53,7 +57,7 @@ const addItem = asyncHandler(async (req, res) => {
     endDate,
   } = req.body;
 
-  const image = req.file.path;
+  const image = req.file.path.replace("frontend/public", "");
 
   //item doesnt have to be unique
 
