@@ -18,6 +18,7 @@ const reducer = combineReducers({
   orderDetails : orderDetailsReducer,
   orderPay : orderPayReducer,
   orderListMy : orderListMyReducer,
+  // itemListMy : itemListMyReducer,
 });
 
 const cartItemsFromStorage = localStorage.getItem('cartItems') 
