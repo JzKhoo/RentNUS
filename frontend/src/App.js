@@ -26,17 +26,17 @@ function App() {
         <Container>
           <Routes>
             <Route path="/items/:id" element={<ItemScreen />} />
-            </Routes>
-            <Routes>
+          </Routes>
+          <Routes>
             <Route path="/addItem" element={<AddItemScreen />} />
-            </Routes>
-            <Routes>
-              <Route path="/displayuserprofile" element={<DisplayUserProfileScreen/>} />
-            </Routes>
-            <Routes>
+          </Routes>
+          <Routes>
+            <Route path="/displayuserprofile" element={<DisplayUserProfileScreen/>} />
+          </Routes>
+          <Routes>
             <Route path="/login" element={<LoginScreen />} />
-            </Routes>
-            <Routes>
+          </Routes>
+          <Routes>
             <Route path="/register" element={<RegisterScreen />} />
           </Routes>
           <Routes>

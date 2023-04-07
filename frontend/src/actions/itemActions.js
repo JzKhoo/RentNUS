@@ -11,11 +11,11 @@ import {
   ITEM_DETAILS_FAIL,
 } from "../constants/itemConstants";
 
-export const listItems = () => async (dispatch) => {
+export const listItems = (keyword='', pageNumber = '') => async (dispatch) => {
   try {
     dispatch({ type: ITEM_LIST_REQUEST });
 
-    const { data } = await axios.get("/api/items");
+    const { data } = await axios.get(`/api/items?keyword=${keyword}&pageNumber=${pageNumber}`);
 
     dispatch({
       type: ITEM_LIST_SUCCESS,

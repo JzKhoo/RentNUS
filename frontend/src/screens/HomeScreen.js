@@ -17,6 +17,7 @@ const HomeScreen = () => {
 
   const itemList = useSelector((state) => state.itemList); // 2. grab the products from the state and pull out what we want from it
   const { loading, error, items, page, pages } = itemList; 
+  console.log(itemList)
 
   useEffect(() => {
     dispatch(listItems(keyword, pageNumber)); // 1. fire off action to get products

@@ -50,16 +50,26 @@ const PlaceOrderScreen = ({ history }) => {
   }, [success])
 
   const placeOrderHandler = () => {
+    
     dispatch(
       createOrder({
         orderItems: cart.cartItems,
         shippingAddress: cart.shippingAddress,
         paymentMethod: cart.paymentMethod,
-        itemsPrice: cart.itemsPrice,
-        shippingPrice: cart.shippingPrice,
-        taxPrice: cart.taxPrice,
-        totalPrice: cart.totalPrice,
+        itemsPrice: "100",
+        shippingPrice: "100",
+        taxPrice: "0",
+        totalPrice: "200",
       })
+      // createOrder({
+      //   orderItems: cart.cartItems,
+      //   shippingAddress: cart.shippingAddress,
+      //   paymentMethod: cart.paymentMethod,
+      //   itemsPrice: cart.itemsPrice,
+      //   shippingPrice: cart.shippingPrice,
+      //   taxPrice: cart.taxPrice,
+      //   totalPrice: cart.totalPrice,
+      // })
     )
   }
 
@@ -103,7 +113,7 @@ const PlaceOrderScreen = ({ history }) => {
                           />
                         </Col>
                         <Col>
-                          <Link to={`/product/${item.product}`}>
+                          <Link to={`/item/${item.item}`}>
                             {item.name}
                           </Link>
                         </Col>

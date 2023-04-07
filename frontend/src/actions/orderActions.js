@@ -23,6 +23,7 @@ import {
 import { logout } from './userActions'
 
 export const createOrder = (order) => async (dispatch, getState) => {
+  console.log(order)
   try {
     dispatch({
       type: ORDER_CREATE_REQUEST,

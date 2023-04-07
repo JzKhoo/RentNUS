@@ -6,13 +6,7 @@ import { composeWithDevTools } from "redux-devtools-extension";
   itemListReducer,
   itemDetailsReducer,
 } from "./reducers/itemReducers"; */
-import { cartReducer } from "./reducers/cartReducers";
-import {
-  userLoginReducer,
-  userRegisterReducer,
-  userDetailsReducer,
-  userUpdateProfileReducer,
-} from "./reducers/userReducers";
+
 import {
   itemAddReducer,
   itemDetailsReducer,
