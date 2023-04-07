@@ -26,6 +26,8 @@ const CartScreen = (match, location, history) => {
 
   const { cartItems } = cart;
 
+  console.log(cartItems)
+
   const navigate = useNavigate();
 
   useEffect(() => {
