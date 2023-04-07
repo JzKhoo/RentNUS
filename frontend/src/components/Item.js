@@ -5,13 +5,13 @@ import { Card } from "react-bootstrap";
 const Item = ({ item }) => {
   return (
     <Card className="my-3 p-3 rounded">
-      <Link to={`/item/${item._id}`}>
+      <Link to={`/items/${item._id}`}>
         <Card.Img src={item.image} variant="top" />
-        {console.log(item.image)}
+        {console. log(item.image)}
       </Link>
 
       <Card.Body>
-        <Link to={`/item/${item._id}`}>
+        <Link to={`/items/${item._id}`}>
           <Card.Title as="div">
             <strong>{item.name}</strong>
           </Card.Title>

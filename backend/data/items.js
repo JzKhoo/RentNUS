@@ -1,6 +1,6 @@
 const items = [
   {
-    ownerEmail: "testee@email.com",
+    ownerEmail: "testee@email.com",  
     renterEmail: null,
     name: "RENT: Airpods Wireless Bluetooth Headphones",
     image: "/images/airpods.jpg",

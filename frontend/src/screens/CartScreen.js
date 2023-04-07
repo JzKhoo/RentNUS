@@ -16,7 +16,7 @@ import { addToCart, removeFromCart } from "../actions/cartActions";
 const CartScreen = () => {
   const { id } = useParams();
 
-  const productId = id;
+  const itemId = id;
 
   const { search } = useLocation();
   const qty = search ? Number(search.split("=")[1]) : 1;
@@ -26,22 +26,23 @@ const CartScreen = () => {
   const cart = useSelector((state) => state.cart);
 
   const { cartItems } = cart;
+  console.log(cartItems)
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (productId) {
-      dispatch(addToCart(productId, qty));
+    if (itemId) {
+      dispatch(addToCart(itemId, qty));
     }
-  }, [dispatch, productId, qty]);
+  }, [dispatch, itemId, qty]);
 
   const removeFromCartHandler = (id) => {
     dispatch(removeFromCart(id));
   };
 
   const checkoutHandler = () => {
-    navigate("/login?redirect=shipping");
-  };
+    navigate('/login?redirect=/shipping')
+  }
 
   return (
     <Row>
@@ -54,13 +55,13 @@ const CartScreen = () => {
         ) : (
           <ListGroup variant="flush">
             {cartItems.map((item) => (
-              <ListGroup.Item key={item.product}>
+              <ListGroup.Item key={item.item}>
                 <Row>
                   <Col md={2}>
                     <Image src={item.image} alt={item.name} fluid rounded />
                   </Col>
                   <Col md={2}>
-                    <Link to={`/product/${item.product}`}>{item.name}</Link>
+                    <Link to={`/items/${item.item}`}>{item.name}</Link>
                   </Col>
                   <Col md={2}>${item.price}</Col>
                   <Col md={2}>
@@ -69,7 +70,7 @@ const CartScreen = () => {
                       value={item.qty}
                       onChange={(e) =>
                         dispatch(
-                          addToCart(item.product, Number(e.target.value))
+                          addToCart(item.item, Number(e.target.value))
                         )
                       }
                     >
@@ -84,7 +85,7 @@ const CartScreen = () => {
                     <Button
                       type="button"
                       variant="light"
-                      onClick={() => removeFromCartHandler(item.product)}
+                      onClick={() => removeFromCartHandler(item.item)}
                     >
                       <i className="fas fa-trash"></i>
                     </Button>

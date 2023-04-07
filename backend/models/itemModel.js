@@ -8,10 +8,10 @@ import mongoose from "mongoose";
 //   },
 //   {
 //     timestamps: true,
-//   }
-// );
+//   } 
+// ); 
 
-const itemSchema = mongoose.Schema(
+const itemSchema = mongoose.Schema( 
   {
     // owner is the user who added the item currently all items on items is made by the admin
     owner: {
@@ -20,18 +20,18 @@ const itemSchema = mongoose.Schema(
       ref: "owner",
     },
     // when item is not being rented do i need to have renter attribute? maybe not
-    renter: {
+    /* renter: {
       type: mongoose.Schema.Types.ObjectId,
       required: false,
       ref: "renter",
-    },
+    }, */
     name: {
       type: String,
       required: true,
     },
     image: {
       type: String,
-      required: true,
+      required: true,  
     },
     brand: {
       type: String,
@@ -60,7 +60,7 @@ const itemSchema = mongoose.Schema(
     },
   },
   {
-    timestamps: true,
+    timestamps: true, 
   }
 );
 
