@@ -56,20 +56,11 @@ const PlaceOrderScreen = ({ history }) => {
         orderItems: cart.cartItems,
         shippingAddress: cart.shippingAddress,
         paymentMethod: cart.paymentMethod,
-        itemsPrice: "100",
-        shippingPrice: "100",
-        taxPrice: "0",
-        totalPrice: "200",
+        itemsPrice: cart.itemsPrice,
+        shippingPrice: cart.shippingPrice,
+        taxPrice: cart.taxPrice,
+        totalPrice: cart.totalPrice,
       })
-      // createOrder({
-      //   orderItems: cart.cartItems,
-      //   shippingAddress: cart.shippingAddress,
-      //   paymentMethod: cart.paymentMethod,
-      //   itemsPrice: cart.itemsPrice,
-      //   shippingPrice: cart.shippingPrice,
-      //   taxPrice: cart.taxPrice,
-      //   totalPrice: cart.totalPrice,
-      // })
     )
   }
 
