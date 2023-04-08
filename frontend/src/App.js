@@ -17,6 +17,7 @@ import ShippingScreen from "./screens/ShippingScreen";
 import PaymentScreen from "./screens/PaymentScreen";
 import PlaceOrderScreen from "./screens/PlaceOrderScreen";
 import MyItemsScreen from "./screens/MyItemsScreen";
+import UserListScreen from "./screens/UserListScreen";
 
 function App() {
   return (
@@ -75,6 +76,9 @@ function App() {
               element={<HomeScreen />}
               exact
             />
+          </Routes>
+          <Routes>
+            <Route path="/admin/userlist" element={<UserListScreen />} exact />
           </Routes>
           <Routes>
             <Route path="/" element={<HomeScreen />} exact />
