@@ -67,7 +67,8 @@ const MyItemsScreen = () => {
                 <th>RATING</th>
                 <th>NUMBER OF REVIEWS</th>
                 <th>PRICE</th>
-                <th>STOCK COUNT</th>
+                <th>BORROW STATUS</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -81,8 +82,21 @@ const MyItemsScreen = () => {
                   <td>{item.reviews ? item.reviews.map((review)=> (<td>{review}</td>)) : 0}</td>
                   <td>{item.rating}</td>
                   <td>{item.numReviews}</td>
-                  <td>{item.price}</td>
-                  <td>{item.countInStock}</td>
+                  <td>{item.pricePerDay}</td>
+                  <td>{item.isBorrowed.lenderConfirmation ? (
+                    item.isBorrowed.borrowerConfirmation ? "ON LOAN" : "AWAITING BORROWER CONFIRMATION"
+                  ) : "NOT ON LOAN"}</td>
+                  <td>{item.isBorrowed.lenderConfirmation ? (
+                        item.isBorrowed.borrowerConfirmation && 
+                        <Button className='btn-sm' variant='light'>
+                          Confirm Item Returned
+                        </Button>
+                      ) : 
+                        <Button className='btn-sm' variant='light'>
+                          Borrow Item
+                        </Button>
+                        }
+                  </td>
                 </tr>
               ))}
             </tbody>

@@ -13,7 +13,9 @@ export const addToCart = (id, qty) => async (dispatch, getState) => {
             image: data.image,
             price: data.pricePerDay,
             countInStock: data.countInStock,
-            qty
+            qty: 1,
+            isBorrowed: { borrowerConfirmation: false, lenderConfirmation: false},
+            isReturned: { borrowerConfirmation: false, lenderConfirmation: false},
         }
     })
 

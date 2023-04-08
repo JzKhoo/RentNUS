@@ -33,6 +33,10 @@ const ItemScreen = () => {
     navigate(`/cart/${id}?qty=${qty}`);
   };
 
+  const viewOwner = () => {
+    navigate(`/displayuserprofile/${item.owner}`);
+  };
+
   return (
     <>
       <Link className="btn btn-light my-3" to="/">
@@ -54,15 +58,25 @@ const ItemScreen = () => {
                   <ListGroupItem>Price/Day: $ {item.pricePerDay}</ListGroupItem>
                   <ListGroupItem>Description: {item.description}</ListGroupItem>
                   {item && item.owner && (
-                    <Link
+                    // <Link
+                    //   className="btn btn-light my-3"
+                    //   // to={{
+                    //   //   pathname: "/displayuserprofile",
+                    //   //   state: { owner: item.owner },
+                    //   // }}
+                    //   to= {"/displayuserprofile"}
+                    //   state= {{owner: item.owner}}
+                    // >
+                    //   View Owner
+                    // </Link>
+                    <Button
+                      onClick={viewOwner}
                       className="btn btn-light my-3"
-                      to={{
-                        pathname: "/displayuserprofile",
-                        state: { owner: item.owner },
-                      }}
+                      type="button"
+                      style={{ fontSize: "1.5rem", padding: "1rem" }}
                     >
                       View Owner
-                    </Link>
+                    </Button>
                   )}
                 </>
               ) : (

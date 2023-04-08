@@ -26,6 +26,11 @@ const Header = () => {
           <Navbar.Collapse id="basic-navbar-nav">
           <SearchBar/> 
             <Nav className="ml-auto">
+              <LinkContainer to="/myOrders">
+                <Nav.Link>
+                  My Orders
+                </Nav.Link>
+              </LinkContainer>
               <LinkContainer to="/myItems">
                 <Nav.Link>
                   My Items

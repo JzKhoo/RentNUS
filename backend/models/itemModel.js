@@ -58,6 +58,17 @@ const itemSchema = mongoose.Schema(
       type: Date,
       required: true,
     },
+    isBorrowed: {
+      borrowerConfirmation: {type: Boolean, required:true, default:false},
+      lenderConfirmation: {type: Boolean, required:true, default:false},
+    },
+    isReturned: {
+      borrowerConfirmation: {type: Boolean, required:true, default:false},
+      lenderConfirmation: {type: Boolean, required:true, default:false},
+    },
+    returnedAt: {
+      type: Date,
+    },
   },
   {
     timestamps: true, 
