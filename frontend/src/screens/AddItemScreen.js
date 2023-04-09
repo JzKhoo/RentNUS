@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Form, Button, Alert } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
-import Loader from "../components/Loader";
+// import Loader from "../components/Loader";
 import FormContainer from "../components/FormContainer";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -12,7 +12,9 @@ import { useDropzone } from "react-dropzone";
 
 const MyDropzone = ({ onFileSelect }) => {
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
-    accept: "image/jpeg, image/png",
+    accept: {
+      "image/*": [".jpeg", ".jpg", ".png"],
+    },
     maxFiles: 1,
     onDrop: (acceptedFiles) => {
       onFileSelect(acceptedFiles[0]);
@@ -33,7 +35,7 @@ const MyDropzone = ({ onFileSelect }) => {
         only)
       </p>
       <ul>{files}</ul>
-      <style jsx>{`
+      <style jsx="true">{`
         .dropzone {
           border: 2px dashed #ccc;
           border-radius: 5px;
@@ -79,7 +81,7 @@ const AddItemScreen = () => {
 
   const userLogin = useSelector((state) => state.userLogin);
   const itemAdd = useSelector((state) => state.itemAdd);
-  const { loading, error, itemInfo } = itemAdd;
+  const { error } = itemAdd;
   const { userInfo } = userLogin;
 
   // modified: location in RRD v6 must be used this way
@@ -136,7 +138,7 @@ const AddItemScreen = () => {
         </Alert>
       )}
       {error && <Message variant="danger">{error}</Message>}
-      {loading && <Loader />}
+      {/* {loading && <Loader />} */}
       <Form onSubmit={submitHandler}>
         <Form.Group controlId="name">
           <Form.Label>Name of Item</Form.Label>
