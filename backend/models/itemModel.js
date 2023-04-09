@@ -58,6 +58,11 @@ const itemSchema = mongoose.Schema(
       type: Date,
       required: true,
     },
+    isOrderPlaced: {
+      type: Boolean,
+      default: false,
+    },
+    // if order is placed, remove from home screen.
   },
   {
     timestamps: true, 

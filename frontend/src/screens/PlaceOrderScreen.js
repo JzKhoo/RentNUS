@@ -49,7 +49,7 @@ if (!order) {
       dispatch({ type: ORDER_CREATE_RESET })
     }
     // eslint-disable-next-line
-  }, [success])
+  }, [success, navigate])
 
   const placeOrderHandler = () => {
     
