@@ -8,6 +8,11 @@ import {
   addItem,
   getItems,
   getItemsById,
+  deleteItemsById,
+  updateItem,
+  getItemsAvailable,
+  getItemsByOwnerId,
+  getItemsByRenterId,
 } from "../controllers/itemController.js";
 
 const storage = multer.diskStorage({
@@ -25,8 +30,16 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 router.route("/").get(getItems);
+router.route("/available").get(getItemsAvailable);
+
 router.route("/:id").get(getItemsById);
-// router.route("/").post(addItem);
-router.route("/").post(protect, upload.single("image"), addItem);
+// router.route("/create").post(addItem);
+router.route("/create").post(protect, upload.single("image"), addItem);
+
+router.route("/:id").delete(protect, deleteItemsById);
+router.route("/:id").put(updateItem);
+
+router.route("/owner/:ownerId").get(getItemsByOwnerId);
+router.route("/renter/:renterId").get(getItemsByRenterId);
 
 export default router;
