@@ -36,7 +36,8 @@ router.route("/:id").get(getItemsById);
 // router.route("/create").post(addItem);
 router.route("/create").post(protect, upload.single("image"), addItem);
 
-router.route("/:id").delete(protect, deleteItemsById);
+//might need to add protect?
+router.route("/:id").delete(deleteItemsById);
 router.route("/:id").put(updateItem);
 
 router.route("/owner/:ownerId").get(getItemsByOwnerId);

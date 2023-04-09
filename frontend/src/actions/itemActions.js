@@ -9,28 +9,36 @@ import {
   ITEM_DETAILS_REQUEST,
   ITEM_DETAILS_SUCCESS,
   ITEM_DETAILS_FAIL,
+  ITEM_DELETE_REQUEST,
+  ITEM_DELETE_SUCCESS,
+  ITEM_DELETE_FAIL,
+  ITEM_DELETE_RESET,
 } from "../constants/itemConstants";
 
-export const listItems = (keyword='', pageNumber = '') => async (dispatch) => {
-  try {
-    dispatch({ type: ITEM_LIST_REQUEST });
+export const listItems =
+  (keyword = "", pageNumber = "") =>
+  async (dispatch) => {
+    try {
+      dispatch({ type: ITEM_LIST_REQUEST });
 
-    const { data } = await axios.get(`/api/items?keyword=${keyword}&pageNumber=${pageNumber}`);
+      const { data } = await axios.get(
+        `/api/items?keyword=${keyword}&pageNumber=${pageNumber}`
+      );
 
-    dispatch({
-      type: ITEM_LIST_SUCCESS,
-      payload: data,
-    });
-  } catch (error) {
-    dispatch({
-      type: ITEM_LIST_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
-    });
-  }
-};
+      dispatch({
+        type: ITEM_LIST_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: ITEM_LIST_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };
 
 export const listItemDetails = (id) => async (dispatch) => {
   try {
@@ -75,6 +83,25 @@ export const addItem = (formData) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: ITEM_ADD_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const deleteItem = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: ITEM_DELETE_REQUEST });
+
+    const { data } = await axios.delete(`/api/items/${id}`);
+
+    dispatch({ type: ITEM_DELETE_SUCCESS, payload: data });
+    dispatch({ type: ITEM_DELETE_RESET });
+  } catch (error) {
+    dispatch({
+      type: ITEM_DELETE_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
