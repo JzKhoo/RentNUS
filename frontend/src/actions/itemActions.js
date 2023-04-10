@@ -3,6 +3,9 @@ import {
   ITEM_LIST_REQUEST,
   ITEM_LIST_SUCCESS,
   ITEM_LIST_FAIL,
+  ITEM_MY_LIST_REQUEST,
+  ITEM_MY_LIST_SUCCESS,
+  ITEM_MY_LIST_FAIL,
   ITEM_ADD_REQUEST,
   ITEM_ADD_SUCCESS,
   ITEM_ADD_FAIL,
@@ -39,6 +42,31 @@ export const listItems =
       });
     }
   };
+
+export const listMyItems = (userId) => async (dispatch) => {
+  try {
+    dispatch({ type: ITEM_MY_LIST_REQUEST });
+
+    const { data } = await axios.get(`/api/items/owner/${userId}`);
+
+    dispatch({
+      type: ITEM_MY_LIST_SUCCESS,
+      payload: {
+        items: data.items,
+        pages: data.pages,
+        page: data.page,
+      },
+    });
+  } catch (error) {
+    dispatch({
+      type: ITEM_MY_LIST_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
 
 export const listItemDetails = (id) => async (dispatch) => {
   try {

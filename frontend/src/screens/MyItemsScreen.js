@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Table, Row, Col, Image, Button, Icon } from "react-bootstrap";
+import { useNavigate, useParams} from "react-router-dom";
+import { Table, Row, Col, Image, ListGroupItem, Button, Icon } from 'react-bootstrap'
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 //import { listProducts } from "../actions/productActions";
-import { listItems, deleteItem } from "../actions/itemActions";
+import { deleteItem, listMyItems } from "../actions/itemActions";
 import { ITEM_DELETE_RESET } from "../constants/itemConstants";
 
 const MyItemsScreen = () => {
@@ -20,10 +20,14 @@ const MyItemsScreen = () => {
   //   const { loading: loadingOrders, error: errorOrders, orders } = orderListMy
 
   const [message, setMessage] = useState(null);
-  const itemList = useSelector((state) => state.itemList); //using productList for now before merge with andre's work
-  const { loading, error, items, page, pages } = itemList;
+  const itemList = useSelector((state) => state.itemMyList);
+  const { loading, error, items } = itemList;
 
-  console.log(itemList);
+  if (itemList) {
+    console.log(itemList);
+  } else {
+    console.log("some thing is wrong");
+  }
 
   const navigate = useNavigate();
 
@@ -32,7 +36,7 @@ const MyItemsScreen = () => {
 
   const deleteHandler = (id) => {
     if (window.confirm("Are you sure you want to delete this item?")) {
-      dispatch(deleteItem(id)).then(() => dispatch(listItems())); // add this line
+      dispatch(deleteItem(id)).then(() => dispatch(listMyItems(userInfo._id))); // add this line
     }
   };
 
@@ -45,15 +49,28 @@ const MyItemsScreen = () => {
       dispatch({ type: ITEM_DELETE_RESET });
       setMessage("Item deleted successfully");
     }
-    dispatch(listItems());
+    dispatch(listMyItems(userInfo._id)); // Execute the action creator
     setMessage(null);
-  }, [dispatch, userInfo, successDelete]);
+  }, [dispatch, userInfo, successDelete, navigate]);
+
+  const createItemhandler = () => {
+    navigate('/addItem')
+  }
 
   return (
     <Row>
       <Col>
         <h2>My Items</h2>
         {message && <Message variant="success">{message}</Message>}
+        <ListGroupItem>
+          <Button
+            onClick={createItemhandler}
+            className="btn-block"
+            type="button"
+          >
+            Add an Item
+          </Button>
+        </ListGroupItem>
         {loading ? (
           <Loader />
         ) : error ? (
@@ -69,6 +86,8 @@ const MyItemsScreen = () => {
                 <th>DESCRIPTION</th>
                 <th>PRICE</th>
                 <th>DELETE</th>
+                <th>BORROW STATUS</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -89,6 +108,20 @@ const MyItemsScreen = () => {
                     >
                       <i className="fas fa-trash">Delete</i>
                     </Button>
+                  </td>
+                  <td>{item.isBorrowed.lenderConfirmation ? (
+                    item.isBorrowed.borrowerConfirmation ? "ON LOAN" : "AWAITING BORROWER CONFIRMATION"
+                  ) : "NOT ON LOAN"}</td>
+                  <td>{item.isBorrowed.lenderConfirmation ? (
+                        item.isBorrowed.borrowerConfirmation && 
+                        <Button className='btn-sm' variant='light'>
+                          Confirm Item Returned
+                        </Button>
+                      ) : 
+                        <Button className='btn-sm' variant='light'>
+                          Borrow Item
+                        </Button>
+                        }
                   </td>
                 </tr>
               ))}

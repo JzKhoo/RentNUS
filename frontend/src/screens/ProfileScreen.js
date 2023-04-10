@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { listMyOrders } from '../actions/orderActions'
-import { getUserDetails, updateUserProfile } from "../actions/userActions";
+import { getLoggedInProfile, updateUserProfile } from "../actions/userActions";
 
 const ProfileScreen = ({ history }) => {
   const [name, setName] = useState("");
@@ -19,9 +19,11 @@ const ProfileScreen = ({ history }) => {
 
   const userDetails = useSelector((state) => state.userDetails);
   const { loading, error, user } = userDetails;
+  console.log("hello: " + user)
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
+  console.log("hello: " + userInfo)
   // to check if user is logged in
 
   const userUpdateProfile = useSelector((state) => state.userUpdateProfile);
@@ -38,7 +40,7 @@ const ProfileScreen = ({ history }) => {
       // if not logged in 
     } else {
       if (!user || !user.name) {
-        dispatch(getUserDetails('profile'));
+        dispatch(getLoggedInProfile());
         dispatch(listMyOrders());
       } else {
         setName(user.name);
@@ -125,7 +127,7 @@ const ProfileScreen = ({ history }) => {
                 <th>DATE</th>
                 <th>TOTAL</th>
                 <th>PAID</th>
-                <th>RETURNED</th>
+                <th>RETURN STATUS</th>
                 <th></th>
               </tr>
             </thead>
@@ -143,11 +145,10 @@ const ProfileScreen = ({ history }) => {
                     )}
                   </td>
                   <td>
-                    {order.isDelivered ? (
-                      order.deliveredAt.substring(0, 10)
-                    ) : (
-                      <i className='fas fa-times' style={{ color: 'red' }}></i>
-                    )}
+          
+                      <Button className='btn-sm' variant='light'>
+                        Return item
+                      </Button>
                   </td>
                   <td>
                     <LinkContainer to={`/order/${order._id}`}>

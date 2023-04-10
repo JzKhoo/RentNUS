@@ -12,6 +12,7 @@ import {
   itemDeleteReducer,
   itemDetailsReducer,
   itemListReducer,
+  itemMyListReducer,
 } from "./reducers/itemReducers";
 // import { productListReducer, productDetailsReducer } from './reducers/productReducers'
 import { cartReducer } from "./reducers/cartReducers";
@@ -30,11 +31,10 @@ import {
 
 const reducer = combineReducers({
   itemList: itemListReducer,
+  itemMyList: itemMyListReducer,
   itemDetails: itemDetailsReducer,
   cart: cartReducer,
   userLogin: userLoginReducer,
-  itemList: itemListReducer,
-  itemDetails: itemDetailsReducer,
   itemAdd: itemAddReducer,
   itemDelete: itemDeleteReducer,
   userRegister: userRegisterReducer,
