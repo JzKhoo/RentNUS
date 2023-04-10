@@ -14,6 +14,9 @@ import {
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { listItemDetails } from "../actions/itemActions";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import moment from "moment";
 
 const ItemScreen = () => {
   const [qty, setQty] = useState(1);
@@ -25,12 +28,26 @@ const ItemScreen = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
+  //const for date selection
+  const [rentalStartDate, setRentalStartDate] = useState(null);
+  const [rentalEndDate, setRentalEndDate] = useState(null);
+  const [totalCost, setTotalCost] = useState(0);
+
   useEffect(() => {
     dispatch(listItemDetails(id));
   }, [dispatch, id]);
 
   const addToCartHandler = () => {
-    navigate(`/cart/${id}?qty=${qty}`);
+    navigate(`/cart/${id}?totalCost=${totalCost}`);
+  };
+
+  const calculateTotalCost = (start, end, pricePerDay) => {
+    if (start && end) {
+      const duration = moment.duration(end.diff(start));
+      const days = duration.asDays() + 1;
+      return days * pricePerDay;
+    }
+    return 0;
   };
 
   return (
@@ -53,6 +70,46 @@ const ItemScreen = () => {
                   </ListGroupItem>
                   <ListGroupItem>Price/Day: $ {item.pricePerDay}</ListGroupItem>
                   <ListGroupItem>Description: {item.description}</ListGroupItem>
+                  <ListGroupItem>
+                    <h5>Select rental dates:</h5>
+                    <DatePicker
+                      selected={rentalStartDate}
+                      onChange={(date) => setRentalStartDate(date)}
+                      selectsStart
+                      rentalStartDate={rentalStartDate}
+                      rentalEndDate={rentalEndDate}
+                      minDate={
+                        new Date(Math.max(new Date(item.startDate), new Date()))
+                      }
+                      maxDate={new Date(item.endDate)}
+                      dateFormat="MMM d"
+                    />
+                    {" - "}
+                    <DatePicker
+                      selected={rentalEndDate}
+                      onChange={(date) => {
+                        setRentalEndDate(date);
+                        setTotalCost(
+                          parseFloat(
+                            calculateTotalCost(
+                              moment(rentalStartDate),
+                              moment(date),
+                              item.pricePerDay
+                            ).toFixed(2)
+                          )
+                        );
+                      }}
+                      selectsEnd
+                      rentalStartDate={rentalStartDate}
+                      rentalEndDate={rentalEndDate}
+                      minDate={rentalStartDate || new Date(item.startDate)}
+                      maxDate={new Date(item.endDate)}
+                      dateFormat="MMM d"
+                    />
+                  </ListGroupItem>
+                  <ListGroupItem>
+                    Total Cost: ${totalCost.toFixed(2)}
+                  </ListGroupItem>
                   {item && item.owner && (
                     <Link
                       className="btn btn-light my-3"
@@ -88,6 +145,7 @@ const ItemScreen = () => {
                       className="btn-block btn-primary"
                       type="button"
                       style={{ fontSize: "1.5rem", padding: "1rem" }}
+                      disabled={!rentalStartDate || !rentalEndDate}
                     >
                       Add To Cart
                     </Button>

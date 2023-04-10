@@ -26,25 +26,25 @@ const CartScreen = () => {
   const cart = useSelector((state) => state.cart);
 
   const { cartItems } = cart;
-  console.log(cartItems)
+  console.log(cartItems);
 
-  console.log(cartItems)
+  console.log(cartItems);
 
   const navigate = useNavigate();
 
   useEffect(() => {
     if (itemId) {
-      dispatch(addToCart(itemId, qty));
+      dispatch(addToCart(itemId));
     }
-  }, [dispatch, itemId, qty]);
+  }, [dispatch, itemId]);
 
   const removeFromCartHandler = (id) => {
     dispatch(removeFromCart(id));
   };
 
   const checkoutHandler = () => {
-    navigate('/login?redirect=/shipping')
-  }
+    navigate("/login?redirect=/shipping");
+  };
 
   return (
     <Row>
@@ -66,23 +66,7 @@ const CartScreen = () => {
                     <Link to={`/items/${item.item}`}>{item.name}</Link>
                   </Col>
                   <Col md={2}>${item.price}</Col>
-                  <Col md={2}>
-                    <Form.Control
-                      as="select"
-                      value={item.qty}
-                      onChange={(e) =>
-                        dispatch(
-                          addToCart(item.item, Number(e.target.value))
-                        )
-                      }
-                    >
-                      {[...Array(item.countInStock).keys()].map((x) => (
-                        <option key={x + 1} value={x + 1}>
-                          {x + 1}
-                        </option>
-                      ))}
-                    </Form.Control>
-                  </Col>
+                  <Col md={2}></Col>
                   <Col md={4}>
                     <Button
                       type="button"
@@ -102,14 +86,8 @@ const CartScreen = () => {
         <Card>
           <ListGroup variant="flush">
             <ListGroup.Item>
-              <h2>
-                Subtotal ({cartItems.reduce((acc, item) => acc + item.qty, 0)})
-                items
-              </h2>
-              $
-              {cartItems
-                .reduce((acc, item) => acc + item.qty * item.price, 0)
-                .toFixed(2)}
+              <h2>Subtotal ({cartItems.reduce((acc) => acc + 1, 0)}) items</h2>$
+              {cartItems.reduce((acc, item) => acc + item.price, 0).toFixed(2)}
             </ListGroup.Item>
             <ListGroup.Item>
               <Button
