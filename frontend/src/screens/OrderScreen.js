@@ -152,10 +152,10 @@ const OrderScreen = ({  }) => {
               </p>
               {order.isDelivered ? (
                 <Message variant='success'>
-                  Delivered on {order.deliveredAt}
+                  Returned on {order.deliveredAt}
                 </Message>
               ) : (
-                <Message variant='danger'>Not Delivered</Message>
+                <Message variant='danger'>Not Returned</Message>
               )}
             </ListGroup.Item>
 

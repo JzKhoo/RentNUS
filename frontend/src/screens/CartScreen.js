@@ -28,6 +28,8 @@ const CartScreen = () => {
   const { cartItems } = cart;
   console.log(cartItems)
 
+  console.log(cartItems)
+
   const navigate = useNavigate();
 
   useEffect(() => {

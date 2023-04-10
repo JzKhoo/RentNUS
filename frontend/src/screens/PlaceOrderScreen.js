@@ -6,15 +6,15 @@ import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import CheckoutSteps from '../components/CheckoutSteps'
 import { createOrder } from '../actions/orderActions'
-// import { ORDER_CREATE_RESET } from '../constants/orderConstants'
-// import { USER_DETAILS_RESET } from '../constants/userConstants'
+import { ORDER_CREATE_RESET } from '../constants/orderConstants'
+import { USER_DETAILS_RESET } from '../constants/userConstants'
 
 const PlaceOrderScreen = ({ history }) => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
   const cart = useSelector((state) => state.cart)
-
+  
   if (!cart.shippingAddress.address) {
     navigate('/shipping')
   } else if (!cart.paymentMethod) {
@@ -39,15 +39,17 @@ const PlaceOrderScreen = ({ history }) => {
   // be ablet to get the state of the actions
   const orderCreate = useSelector((state) => state.orderCreate)
   const { order, success, error } = orderCreate
-
+if (!order) {
+  console.log('test')
+}
   useEffect(() => {
     if (success) {
       navigate(`/order/${order._id}`)
-    //   dispatch({ type: USER_DETAILS_RESET })
-    //   dispatch({ type: ORDER_CREATE_RESET })
+      dispatch({ type: USER_DETAILS_RESET })
+      dispatch({ type: ORDER_CREATE_RESET })
     }
     // eslint-disable-next-line
-  }, [success])
+  }, [success, navigate])
 
   const placeOrderHandler = () => {
     
@@ -149,9 +151,9 @@ const PlaceOrderScreen = ({ history }) => {
                   <Col>${cart.totalPrice}</Col>
                 </Row>
               </ListGroup.Item>
-              {/* <ListGroup.Item>
+              <ListGroup.Item>
                 {error && <Message variant='danger'>{error}</Message>}
-              </ListGroup.Item> */}
+              </ListGroup.Item>
               <ListGroup.Item>
                 <Button
                   type='button'
