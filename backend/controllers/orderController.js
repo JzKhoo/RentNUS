@@ -1,6 +1,6 @@
 import asyncHandler from 'express-async-handler'
 import Order from '../models/orderModel.js'
-
+import Item from '../models/itemModel.js'
 
 // @desc    Create new order
 // @route   POST /api/orders
@@ -15,7 +15,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
     shippingPrice,
     totalPrice,
   } = req.body
-
+  
   if (orderItems && orderItems.length === 0) {
     res.status(400)
     throw new Error('No order items')
@@ -34,7 +34,11 @@ const addOrderItems = asyncHandler(async (req, res) => {
       })
   
       const createdOrder = await order.save()
-  
+      
+      for (const item of orderItems) {
+        await Item.updateOne({ _id: item.item }, { isOrderPlaced: true });
+      } // get item and set isorderplaced to be true.
+
       res.status(201).json(createdOrder)
       console.log("Successfully created Order!")
     } catch (error) {

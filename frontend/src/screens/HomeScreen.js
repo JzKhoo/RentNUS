@@ -35,9 +35,13 @@ const HomeScreen = () => {
         <>
         <Row>
           {items.map((item) => (
+            // check if isOrderPlaced is true
+              // if it's true, don't display the item
+              // otherwise, display the item
+            !item.isOrderPlaced && (
             <Col key={item._id} sm={12} md={6} lg={4} xl={3}>
               <Item item={item} />
-            </Col>
+            </Col>)
           ))}
         </Row>
         <Paginate pages={pages} page={page} keyword={keyword ? keyword : ''}/>
