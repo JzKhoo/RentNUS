@@ -21,6 +21,11 @@ const CartScreen = () => {
   const { search } = useLocation();
   const qty = search ? Number(search.split("=")[1]) : 1;
 
+  const searchParams = new URLSearchParams(search);
+  const totalCost = searchParams.get("totalCost")
+    ? Number(searchParams.get("totalCost"))
+    : 1;
+
   const dispatch = useDispatch();
 
   const cart = useSelector((state) => state.cart);
@@ -34,9 +39,9 @@ const CartScreen = () => {
 
   useEffect(() => {
     if (itemId) {
-      dispatch(addToCart(itemId));
+      dispatch(addToCart(itemId, totalCost));
     }
-  }, [dispatch, itemId]);
+  }, [dispatch, itemId, totalCost]);
 
   const removeFromCartHandler = (id) => {
     dispatch(removeFromCart(id));
@@ -66,6 +71,7 @@ const CartScreen = () => {
                     <Link to={`/items/${item.item}`}>{item.name}</Link>
                   </Col>
                   <Col md={2}>${item.price}</Col>
+                  {console.log(item.price)}
                   <Col md={2}></Col>
                   <Col md={4}>
                     <Button
@@ -86,8 +92,14 @@ const CartScreen = () => {
         <Card>
           <ListGroup variant="flush">
             <ListGroup.Item>
-              <h2>Subtotal ({cartItems.reduce((acc) => acc + 1, 0)}) items</h2>$
-              {cartItems.reduce((acc, item) => acc + item.price, 0).toFixed(2)}
+              <h2>
+                Subtotal ({cartItems.reduce((acc, item) => acc + item.qty, 0)})
+                items
+              </h2>
+              $
+              {cartItems
+                .reduce((acc, item) => acc + item.price * item.qty, 0)
+                .toFixed(2)}
             </ListGroup.Item>
             <ListGroup.Item>
               <Button
