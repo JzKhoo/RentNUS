@@ -5,9 +5,12 @@ import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { listUsers, deleteUser } from "../actions/userActions";
+import { useNavigate } from "react-router-dom";
 
 const UserListScreen = ({ history }) => {
   const dispatch = useDispatch()
+
+  const navigate = useNavigate()
 
   const userList = useSelector((state) => state.userList)
   const { loading, error, users } = userList
@@ -22,9 +25,9 @@ const UserListScreen = ({ history }) => {
     if (userInfo && userInfo.isAdmin) {
         dispatch(listUsers())
     } else {
-        history.push('/login')
+        navigate('/login')
     }
-  }, [dispatch, history, successDelete])
+  }, [dispatch, history, successDelete, userInfo])
 
   const deleteHandler = (id) => {
     dispatch(deleteUser(id))
@@ -59,7 +62,7 @@ const UserListScreen = ({ history }) => {
                             )}
                         </td>
                         <td>
-                            <LinkContainer to={`/user/${user._id}/edit`}>
+                            <LinkContainer to={`/admin/user/${user._id}/edit`}>
                                 <Button variant='light' className='btn-sm'>
                                     <i className='fas fa-edit'></i>
                                 </Button>

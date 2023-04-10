@@ -18,6 +18,7 @@ import PaymentScreen from "./screens/PaymentScreen";
 import PlaceOrderScreen from "./screens/PlaceOrderScreen";
 import MyItemsScreen from "./screens/MyItemsScreen";
 import UserListScreen from "./screens/UserListScreen";
+import UserEditScreen from "./screens/UserEditScreen";
 
 function App() {
   return (
@@ -79,6 +80,9 @@ function App() {
           </Routes>
           <Routes>
             <Route path="/admin/userlist" element={<UserListScreen />} exact />
+          </Routes>
+          <Routes>
+            <Route path="/admin/user/:id/edit" element={<UserEditScreen />} exact />
           </Routes>
           <Routes>
             <Route path="/" element={<HomeScreen />} exact />
