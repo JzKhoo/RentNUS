@@ -104,13 +104,25 @@ export const register = (name, email, password) => async (dispatch) => {
   }
 };
 
-export const getOwnerDetails = (ownerId) => async (dispatch) => {
+export const getLoggedInProfile = () => async (dispatch, getState) => {
+  // get state to get token 
   try {
     dispatch({
       type: USER_DETAILS_REQUEST,
     });
 
-    const { data } = await axios.get(`/api/users/${ownerId}`);
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.get(`/api/users/loggedInProfile`, config);
 
     dispatch({
       type: USER_DETAILS_SUCCESS,

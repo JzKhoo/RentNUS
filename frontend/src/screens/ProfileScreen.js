@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { listMyOrders } from '../actions/orderActions'
-import { getUserDetails, updateUserProfile } from "../actions/userActions";
+import { getLoggedInProfile, updateUserProfile } from "../actions/userActions";
 
 const ProfileScreen = ({ history }) => {
   const [name, setName] = useState("");
@@ -23,6 +23,7 @@ const ProfileScreen = ({ history }) => {
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
+  console.log("hello: " + userInfo)
   // to check if user is logged in
 
   const userUpdateProfile = useSelector((state) => state.userUpdateProfile);
@@ -39,7 +40,7 @@ const ProfileScreen = ({ history }) => {
       // if not logged in 
     } else {
       if (!user || !user.name) {
-        dispatch(getUserDetails('profile'));
+        dispatch(getLoggedInProfile());
         dispatch(listMyOrders());
       } else {
         setName(user.name);
