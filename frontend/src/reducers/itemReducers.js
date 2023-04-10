@@ -2,6 +2,9 @@ import {
   ITEM_LIST_REQUEST,
   ITEM_LIST_SUCCESS,
   ITEM_LIST_FAIL,
+  ITEM_MY_LIST_REQUEST,
+  ITEM_MY_LIST_SUCCESS,
+  ITEM_MY_LIST_FAIL,
   ITEM_ADD_REQUEST,
   ITEM_ADD_SUCCESS,
   ITEM_ADD_FAIL,
@@ -26,6 +29,24 @@ export const itemListReducer = (state = { items: [] }, action) => {
         page: action.payload.page,
       };
     case ITEM_LIST_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const itemMyListReducer = (state = { items: [] }, action) => {
+  switch (action.type) {
+    case ITEM_MY_LIST_REQUEST:
+      return { loading: true, items: [] };
+    case ITEM_MY_LIST_SUCCESS:
+      return {
+        loading: false,
+        items: action.payload.items,
+        pages: action.payload.pages,
+        page: action.payload.page,
+      };
+    case ITEM_MY_LIST_FAIL:
       return { loading: false, error: action.payload };
     default:
       return state;
