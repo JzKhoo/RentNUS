@@ -198,8 +198,12 @@ const getItemsByOwnerId = asyncHandler(async (req, res) => {
   const ownerId = req.params.ownerId;
   const items = await Item.find({ owner: ownerId });
 
+  const itemsPerPage = 10;
+  const pages = Math.ceil(items.length / itemsPerPage);
+  const page = 1; // You can update this value based on the request's query parameters.
+
   if (items.length > 0) {
-    res.json(items);
+    res.json({ items: items, pages: pages, page: page });
   } else {
     res.status(404);
     throw new Error("No items found for this owner");

@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 //import { listProducts } from "../actions/productActions";
-import { listItems, deleteItem } from "../actions/itemActions";
+import { deleteItem, listMyItems } from "../actions/itemActions";
 import { ITEM_DELETE_RESET } from "../constants/itemConstants";
 
 const MyItemsScreen = () => {
@@ -20,10 +20,14 @@ const MyItemsScreen = () => {
   //   const { loading: loadingOrders, error: errorOrders, orders } = orderListMy
 
   const [message, setMessage] = useState(null);
-  const itemList = useSelector((state) => state.itemList); //using productList for now before merge with andre's work
-  const { loading, error, items, page, pages } = itemList;
+  const itemList = useSelector((state) => state.itemMyList);
+  const { loading, error, items } = itemList;
 
-  console.log(itemList);
+  if (itemList) {
+    console.log(itemList);
+  } else {
+    console.log("some thing is wrong");
+  }
 
   const navigate = useNavigate();
 
@@ -32,7 +36,7 @@ const MyItemsScreen = () => {
 
   const deleteHandler = (id) => {
     if (window.confirm("Are you sure you want to delete this item?")) {
-      dispatch(deleteItem(id)).then(() => dispatch(listItems())); // add this line
+      dispatch(deleteItem(id)).then(() => dispatch(listMyItems(userInfo._id))); // add this line
     }
   };
 
@@ -45,9 +49,9 @@ const MyItemsScreen = () => {
       dispatch({ type: ITEM_DELETE_RESET });
       setMessage("Item deleted successfully");
     }
-    dispatch(listItems());
+    dispatch(listMyItems(userInfo._id)); // Execute the action creator
     setMessage(null);
-  }, [dispatch, userInfo, successDelete]);
+  }, [dispatch, userInfo, successDelete, navigate]);
 
   const createItemhandler = () => {
     navigate('/addItem')
