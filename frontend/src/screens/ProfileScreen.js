@@ -19,6 +19,7 @@ const ProfileScreen = ({ history }) => {
 
   const userDetails = useSelector((state) => state.userDetails);
   const { loading, error, user } = userDetails;
+  console.log("hello: " + user)
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
@@ -125,7 +126,7 @@ const ProfileScreen = ({ history }) => {
                 <th>DATE</th>
                 <th>TOTAL</th>
                 <th>PAID</th>
-                <th>RETURNED</th>
+                <th>RETURN STATUS</th>
                 <th></th>
               </tr>
             </thead>
@@ -143,11 +144,10 @@ const ProfileScreen = ({ history }) => {
                     )}
                   </td>
                   <td>
-                    {order.isDelivered ? (
-                      order.deliveredAt.substring(0, 10)
-                    ) : (
-                      <i className='fas fa-times' style={{ color: 'red' }}></i>
-                    )}
+          
+                      <Button className='btn-sm' variant='light'>
+                        Return item
+                      </Button>
                   </td>
                   <td>
                     <LinkContainer to={`/order/${order._id}`}>

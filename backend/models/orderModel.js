@@ -13,6 +13,8 @@ const orderSchema = mongoose.Schema(
         qty: { type: Number, required: true },
         image: { type: String, required: true },
         price: { type: Number, required: true },
+        isBorrowed: { borrowerConfirmation: {type: Boolean, required: true}, lenderConfirmation: {type: Boolean, required: true}},
+        isReturned: { borrowerConfirmation: {type: Boolean, required: true}, lenderConfirmation: {type: Boolean, required: true}},
         item: {
           type: mongoose.Schema.Types.ObjectId,
           required: true,
@@ -57,14 +59,6 @@ const orderSchema = mongoose.Schema(
       default: false,
     },
     paidAt: {
-      type: Date,
-    },
-    isDelivered: {
-      type: Boolean,
-      required: true,
-      default: false,
-    },
-    deliveredAt: {
       type: Date,
     },
   },

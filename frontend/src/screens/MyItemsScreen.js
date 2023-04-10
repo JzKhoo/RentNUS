@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Table, Row, Col, Image, Button, Icon } from "react-bootstrap";
+import { useNavigate, useParams} from "react-router-dom";
+import { Table, Row, Col, Image, ListGroupItem, Button, Icon } from 'react-bootstrap'
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
@@ -49,11 +49,24 @@ const MyItemsScreen = () => {
     setMessage(null);
   }, [dispatch, userInfo, successDelete]);
 
+  const createItemhandler = () => {
+    navigate('/addItem')
+  }
+
   return (
     <Row>
       <Col>
         <h2>My Items</h2>
         {message && <Message variant="success">{message}</Message>}
+        <ListGroupItem>
+          <Button
+            onClick={createItemhandler}
+            className="btn-block"
+            type="button"
+          >
+            Add an Item
+          </Button>
+        </ListGroupItem>
         {loading ? (
           <Loader />
         ) : error ? (
@@ -69,6 +82,8 @@ const MyItemsScreen = () => {
                 <th>DESCRIPTION</th>
                 <th>PRICE</th>
                 <th>DELETE</th>
+                <th>BORROW STATUS</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -89,6 +104,20 @@ const MyItemsScreen = () => {
                     >
                       <i className="fas fa-trash">Delete</i>
                     </Button>
+                  </td>
+                  <td>{item.isBorrowed.lenderConfirmation ? (
+                    item.isBorrowed.borrowerConfirmation ? "ON LOAN" : "AWAITING BORROWER CONFIRMATION"
+                  ) : "NOT ON LOAN"}</td>
+                  <td>{item.isBorrowed.lenderConfirmation ? (
+                        item.isBorrowed.borrowerConfirmation && 
+                        <Button className='btn-sm' variant='light'>
+                          Confirm Item Returned
+                        </Button>
+                      ) : 
+                        <Button className='btn-sm' variant='light'>
+                          Borrow Item
+                        </Button>
+                        }
                   </td>
                 </tr>
               ))}
