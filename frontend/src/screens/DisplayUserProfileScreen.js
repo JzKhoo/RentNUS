@@ -14,7 +14,7 @@ const DisplayUserProfileScreen = () => {
 
   const userDetails = useSelector((state) => state.userDetails);
   const { loading, error, user } = userDetails;
-  console.log(user)
+  console.log("User" + user)
 
   // const location = useLocation();
   // const ownerId = location.state?.owner;
@@ -22,7 +22,7 @@ const DisplayUserProfileScreen = () => {
 
   useEffect(() => {
     if (owner) {
-      dispatch(getUserDetails("profile"));
+      dispatch(getUserDetails(owner));
     }
     // if (owner) {
     //   setName(owner.name);

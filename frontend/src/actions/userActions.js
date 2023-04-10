@@ -129,7 +129,7 @@ export const getOwnerDetails = (ownerId) => async (dispatch) => {
 
 export const getUserDetails = (id) => async (dispatch, getState) => {
   // get state to get token 
-  console.log("  " + id)
+  console.log("Check if ID exists: " + id)
   try {
     dispatch({
       type: USER_DETAILS_REQUEST,
@@ -146,7 +146,7 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await axios.get(`/api/users/${id}`, config);
+    const { data } = await axios.get(`/api/users/profile/${id}`);
 
     dispatch({
       type: USER_DETAILS_SUCCESS,
