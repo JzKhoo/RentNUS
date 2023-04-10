@@ -105,19 +105,52 @@ const MyItemsScreen = () => {
                       <i className="fas fa-trash">Delete</i>
                     </Button>
                   </td>
-                  <td>{item.isBorrowed.lenderConfirmation ? (
-                    item.isBorrowed.borrowerConfirmation ? "ON LOAN" : "AWAITING BORROWER CONFIRMATION"
-                  ) : "NOT ON LOAN"}</td>
-                  <td>{item.isBorrowed.lenderConfirmation ? (
-                        item.isBorrowed.borrowerConfirmation && 
-                        <Button className='btn-sm' variant='light'>
-                          Confirm Item Returned
-                        </Button>
-                      ) : 
-                        <Button className='btn-sm' variant='light'>
-                          Borrow Item
-                        </Button>
-                        }
+                  <td>
+                  {item.isPlacedOrder ? (
+                    item.isBorrowed.borrowerConfirmation ? (
+                      item.isBorrowed.lenderConfirmation ? (
+                        item.isReturned.borrowerConfirmation ? (
+                          item.isReturned.lenderConfirmation && 
+                              "RETURNED"
+                          ) : (
+                              "AWAITING RETURNED CONFIRMATION FROM LENDER"
+                          )
+                      ) : (
+                          "ON LOAN"
+                      )
+                  ) : (
+                      "AWAITING BORROW CONFIRMATION FROM BORROWER"
+                  )
+                  ) : (
+                    "NOT ON LOAN"
+                  )
+                    
+                  }
+                  </td>
+                  <td>
+                  {item.isPlacedOrder ? (
+                    item.isBorrowed.borrowerConfirmation ? (
+                      item.isBorrowed.lenderConfirmation ? (
+                        item.isReturned.borrowerConfirmation ? (
+                          item.isReturned.lenderConfirmation && 
+                              "RETURNED"
+                          ) : (
+                            <Button className='btn-sm' variant='light'>
+                              Confirm Item Returned
+                            </Button>
+                          )
+                      ) : (
+                          "ON LOAN"
+                      )
+                  ) : (
+                      "AWAITING BORROW CONFIRMATION FROM BORROWER"
+                  )
+                  ) : (
+                    <Button className='btn-sm' variant='light'>
+                      Borrow Item
+                    </Button>
+                  )
+                  }
                   </td>
                 </tr>
               ))}
