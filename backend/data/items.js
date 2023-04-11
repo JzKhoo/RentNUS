@@ -1,7 +1,5 @@
 const items = [
   {
-    ownerEmail: "testee@email.com",  
-    renterEmail: null,
     name: "RENT: Airpods Wireless Bluetooth Headphones",
     image: "/images/airpods.jpg",
     description:
@@ -13,8 +11,6 @@ const items = [
     endDate: new Date("2023-06-01"),
   },
   {
-    ownerEmail: "testee@email.com",
-    renterEmail: null,
     name: "RENT: iPhone 11 Pro 256GB Memory",
     image: "/images/phone.jpg",
     description:
@@ -26,8 +22,6 @@ const items = [
     endDate: new Date("2023-06-01"),
   },
   {
-    ownerEmail: "testee@email.com",
-    renterEmail: null,
     name: "RENT: Cannon EOS 80D DSLR Camera",
     image: "/images/camera.jpg",
     description:
@@ -39,8 +33,6 @@ const items = [
     endDate: new Date("2023-06-01"),
   },
   {
-    ownerEmail: "john@email.com",
-    renterEmail: null,
     name: "RENT: Sony Playstation 4 Pro White Version",
     image: "/images/playstation.jpg",
     description:
@@ -52,8 +44,6 @@ const items = [
     endDate: new Date("2023-06-01"),
   },
   {
-    ownerEmail: "john@email.com",
-    renterEmail: null,
     name: "RENT: Logitech G-Series Gaming Mouse",
     image: "/images/mouse.jpg",
     description:
@@ -65,8 +55,6 @@ const items = [
     endDate: new Date("2023-06-01"),
   },
   {
-    ownerEmail: "jane@email.com",
-    renterEmail: null,
     name: "RENT: Amazon Echo Dot 3rd Generation",
     image: "/images/alexa.jpg",
     description:

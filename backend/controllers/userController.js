@@ -61,8 +61,28 @@ const registerUser = asyncHandler(async (req, res) => {
 // @desc    Get user profile
 // @route   GET /api/users/profile
 // @access  Private
-const getUserProfile = asyncHandler(async (req, res) => {
+const getLoggedInProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
+  
+
+  if (user) {
+    res.json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      isAdmin: user.isAdmin,
+    });
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
+
+// @desc    Get user profile
+// @route   GET /api/users/profile
+// @access  Public
+const getUserProfile = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id);
 
   if (user) {
     res.json({
@@ -166,5 +186,5 @@ const updateUser = asyncHandler(async (req, res) => {
   }
 });
 
-export { authUser, registerUser, getUserProfile, updateUserProfile, getUsers, deleteUser, getUserById, updateUser };
+export { authUser, registerUser, getLoggedInProfile, getUserProfile, updateUserProfile, getUsers, deleteUser, getUserById, updateUser };
 

@@ -19,6 +19,7 @@ import PlaceOrderScreen from "./screens/PlaceOrderScreen";
 import MyItemsScreen from "./screens/MyItemsScreen";
 import UserListScreen from "./screens/UserListScreen";
 import UserEditScreen from "./screens/UserEditScreen";
+import MyOrdersScreen from "./screens/MyOrdersScreen";
 
 function App() {
   return (
@@ -32,8 +33,11 @@ function App() {
           <Routes>
             <Route path="/addItem" element={<AddItemScreen />} />
           </Routes>
-          <Routes>
+          {/* <Routes>
             <Route path="/displayuserprofile" element={<DisplayUserProfileScreen/>} />
+          </Routes> */}
+          <Routes>
+            <Route path="/displayuserprofile/:owner" element={<DisplayUserProfileScreen/>} />
           </Routes>
           <Routes>
             <Route path="/login" element={<LoginScreen />} />
@@ -64,6 +68,9 @@ function App() {
           </Routes>
           <Routes>
             <Route path="/search/:keyword" element={<HomeScreen />} exact />
+          </Routes>
+          <Routes>
+            <Route path="/myOrders" element={<MyOrdersScreen />} />
           </Routes>
           <Routes>
             <Route path="/myItems" element={<MyItemsScreen />} />

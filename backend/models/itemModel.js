@@ -1,37 +1,26 @@
 import mongoose from "mongoose";
 
-// const reviewSchema = mongoose.Schema(
-//   {
-//     name: { type: String, required: true },
-//     rating: { type: Number, required: true },
-//     comment: { type: String, required: true },
-//   },
-//   {
-//     timestamps: true,
-//   } 
-// ); 
-
-const itemSchema = mongoose.Schema( 
+const itemSchema = mongoose.Schema(
   {
     // owner is the user who added the item currently all items on items is made by the admin
     owner: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
-      ref: "owner",
+      ref: "User",
     },
-    // when item is not being rented do i need to have renter attribute? maybe not
-    /* renter: {
+    // required to display -> myItems borrowed
+    renter: {
       type: mongoose.Schema.Types.ObjectId,
       required: false,
-      ref: "renter",
-    }, */
+      ref: "User",
+    },
     name: {
       type: String,
       required: true,
     },
     image: {
       type: String,
-      required: true,  
+      required: true,
     },
     brand: {
       type: String,
@@ -58,9 +47,26 @@ const itemSchema = mongoose.Schema(
       type: Date,
       required: true,
     },
+    // used to check if item has an OderPlaced -> if orderPlaced remove from HomeScreen
+    isOrderPlaced: {
+      type: Boolean,
+      required: true,
+      default: false,
+    }, 
+    isBorrowed: {
+      borrowerConfirmation: {type: Boolean, required:true, default:false},
+      lenderConfirmation: {type: Boolean, required:true, default:false},
+    },
+    isReturned: {
+      borrowerConfirmation: {type: Boolean, required:true, default:false},
+      lenderConfirmation: {type: Boolean, required:true, default:false},
+    },
+    returnedAt: {
+      type: Date,
+    },
   },
   {
-    timestamps: true, 
+    timestamps: true,
   }
 );
 

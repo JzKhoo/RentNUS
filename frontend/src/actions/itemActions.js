@@ -3,27 +3,63 @@ import {
   ITEM_LIST_REQUEST,
   ITEM_LIST_SUCCESS,
   ITEM_LIST_FAIL,
+  ITEM_MY_LIST_REQUEST,
+  ITEM_MY_LIST_SUCCESS,
+  ITEM_MY_LIST_FAIL,
   ITEM_ADD_REQUEST,
   ITEM_ADD_SUCCESS,
   ITEM_ADD_FAIL,
   ITEM_DETAILS_REQUEST,
   ITEM_DETAILS_SUCCESS,
   ITEM_DETAILS_FAIL,
+  ITEM_DELETE_REQUEST,
+  ITEM_DELETE_SUCCESS,
+  ITEM_DELETE_FAIL,
+  ITEM_DELETE_RESET,
 } from "../constants/itemConstants";
 
-export const listItems = (keyword='', pageNumber = '') => async (dispatch) => {
-  try {
-    dispatch({ type: ITEM_LIST_REQUEST });
+export const listItems =
+  (keyword = "", pageNumber = "") =>
+  async (dispatch) => {
+    try {
+      dispatch({ type: ITEM_LIST_REQUEST });
 
-    const { data } = await axios.get(`/api/items?keyword=${keyword}&pageNumber=${pageNumber}`);
+      const { data } = await axios.get(
+        `/api/items?keyword=${keyword}&pageNumber=${pageNumber}`
+      );
+
+      dispatch({
+        type: ITEM_LIST_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: ITEM_LIST_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };
+
+export const listMyItems = (userId) => async (dispatch) => {
+  try {
+    dispatch({ type: ITEM_MY_LIST_REQUEST });
+
+    const { data } = await axios.get(`/api/items/owner/${userId}`);
 
     dispatch({
-      type: ITEM_LIST_SUCCESS,
-      payload: data,
+      type: ITEM_MY_LIST_SUCCESS,
+      payload: {
+        items: data.items,
+        pages: data.pages,
+        page: data.page,
+      },
     });
   } catch (error) {
     dispatch({
-      type: ITEM_LIST_FAIL,
+      type: ITEM_MY_LIST_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
@@ -75,6 +111,25 @@ export const addItem = (formData) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: ITEM_ADD_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const deleteItem = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: ITEM_DELETE_REQUEST });
+
+    const { data } = await axios.delete(`/api/items/${id}`);
+
+    dispatch({ type: ITEM_DELETE_SUCCESS, payload: data });
+    dispatch({ type: ITEM_DELETE_RESET });
+  } catch (error) {
+    dispatch({
+      type: ITEM_DELETE_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
