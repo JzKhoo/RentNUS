@@ -33,7 +33,7 @@ const upload = multer({ storage })
 router.route('/').get(getItems)
 router.route('/available').get(getItemsAvailable)
 
-router.route('/:id').get(getItemsById).delete(protect, admin, deleteItem)
+router.route('/:id').get(getItemsById).delete(protect, admin, deleteItem).put(protect, admin, updateItem)
 // router.route("/create").post(addItem);
 router.route('/create').post(protect, upload.single('image'), addItem)
 

@@ -97,7 +97,7 @@ const addItem = asyncHandler(async (req, res) => {
     res.status(201).json({
       _id: item._id,
       ownerId: item.owner,
-      retnerId: item.retner,
+      renterId: item.renter,
       name: item.name,
       image: item.image,
       brand: item.brand,
@@ -115,44 +115,58 @@ const addItem = asyncHandler(async (req, res) => {
 
 // @desc update an Item by the item Id
 // @route PUT /api/items/:id
-// @access Private
+// @access Private/Admin
 
 const updateItem = asyncHandler(async (req, res) => {
-  const {
-    _id,
-    renter,
-    name,
-    brand,
-    category,
-    description,
-    pricePerDay,
-    isOrderPlaced,
-  } = req.body
 
-  const renterObjectId = new mongoose.Types.ObjectId(renter)
+  const item = await Item.findById(req.params.id)
 
-  const updatedItem = await Item.findOneAndUpdate(
-    { _id: req.params.id },
-    {
-      $set: {
-        renter: renterObjectId,
-        name: name,
-        brand: brand,
-        category: category,
-        description: description,
-        pricePerDay: pricePerDay,
-        isOrderPlaced: isOrderPlaced,
-      },
-    },
-    { new: true }
-  )
+  if (item) {
+    item.name = req.body.name || item.name,
+    item.brand = req.body.brand || item.brand,
+    item.category = req.body.category || item.category,
+    item.description = req.body.description || item.description,
+    item.pricePerDay = req.body.pricePerDay || item.pricePerDay,
+    item.isOrderPlaced = req.body.isOrderPlaced || item.isOrderPlaced
 
-  if (updatedItem) {
-    res.json(updatedItem)
+    const updatedItem = await item.save()
+    res.json({
+      name: updateItem.name,
+      brand: updateItem.brand,
+      category: updateItem.category,
+      description: updateItem.description,
+      pricePerDay: updateItem.pricePerDay,
+      isOrderPlaced: updateItem.isOrderPlaced
+    })
   } else {
     res.status(404)
     throw new Error('Item not found')
   }
+
+  // const renterObjectId = new mongoose.Types.ObjectId(renter)
+
+  // const updatedItem = await Item.findOneAndUpdate(
+  //   { _id: req.params.id },
+  //   {
+  //     $set: {
+  //       renter: renterObjectId,
+  //       name: name,
+  //       brand: brand,
+  //       category: category,
+  //       description: description,
+  //       pricePerDay: pricePerDay,
+  //       isOrderPlaced: isOrderPlaced,
+  //     },
+  //   },
+  //   { new: true }
+  // )
+
+  // if (updatedItem) {
+  //   res.json(updatedItem)
+  // } else {
+  //   res.status(404)
+  //   throw new Error('Item not found')
+  // }
 })
 
 // @desc fetch all AVAILABLE rental Items isOrderPlaced == false in batches of 5
@@ -231,16 +245,17 @@ const getItemsByRenterId = asyncHandler(async (req, res) => {
 // @access Private/Admin
 
 const deleteItem = asyncHandler(async (req, res) => {
-  const item = await Item.findById(req.params.id);
+  const item = await Item.findById(req.params.id)
 
   if (item) {
     await Item.deleteOne({ _id: item._id })
     res.json({ message: 'Item removed' })
   } else {
-    res.status(404);
-    throw new Error("Item not found");
+    res.status(404)
+    throw new Error('Item not found')
   }
-});
+})
+
 
 export {
   getItems,
@@ -251,5 +266,5 @@ export {
   getItemsAvailable,
   getItemsByOwnerId,
   getItemsByRenterId,
-  deleteItem
+  deleteItem,
 }

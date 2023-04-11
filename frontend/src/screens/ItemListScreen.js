@@ -34,7 +34,7 @@ const ItemListScreen = ({ history }) => {
   }
 
   const createItemHandler = (item) => {
-    // CREATE ITEM
+    navigate('/addItem')
   }
 
   return (

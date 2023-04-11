@@ -21,6 +21,7 @@ import UserListScreen from './screens/UserListScreen'
 import UserEditScreen from './screens/UserEditScreen'
 import MyOrdersScreen from './screens/MyOrdersScreen'
 import ItemListScreen from './screens/ItemListScreen'
+import ItemEditScreen from './screens/ItemEditScreen'
 
 function App() {
   return (
@@ -101,6 +102,13 @@ function App() {
           </Routes>
           <Routes>
             <Route path='/admin/itemlist' element={<ItemListScreen />} exact />
+          </Routes>
+          <Routes>
+            <Route
+              path='/admin/item/:id/edit'
+              element={<ItemEditScreen />}
+              exact
+            />
           </Routes>
           <Routes>
             <Route path='/' element={<HomeScreen />} exact />
