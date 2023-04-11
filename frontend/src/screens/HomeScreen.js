@@ -34,7 +34,7 @@ const HomeScreen = () => {
       ) : (
         <>
         <Row>
-          {items.map((item) => (
+        {items && items.map((item) => (
             // check if isOrderPlaced is true
               // if it's true, don't display the item
               // otherwise, display the item
