@@ -4,11 +4,12 @@ import { Table, Button, Row, Col } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
-import { listItems } from '../actions/itemActions'
+import { listItems, deleteItem } from '../actions/itemActions'
 import { useNavigate } from 'react-router-dom'
 
-const ItemListScreen = ({ history, match }) => {
+const ItemListScreen = ({ history }) => {
   const dispatch = useDispatch()
+
   const navigate = useNavigate()
 
   const itemList = useSelector((state) => state.itemList)
@@ -17,18 +18,19 @@ const ItemListScreen = ({ history, match }) => {
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
 
+  const itemDelete = useSelector((state) => state.itemDelete)
+  const { success: successDelete } = itemDelete
+
   useEffect(() => {
     if (userInfo && userInfo.isAdmin) {
       dispatch(listItems())
     } else {
       navigate('/login')
     }
-  }, [dispatch, history, userInfo])
+  }, [dispatch, history, successDelete, userInfo])
 
   const deleteHandler = (id) => {
-    if (window.confirm('Are you sure')) {
-      // DELETE ITEM
-    }
+    dispatch(deleteItem(id))
   }
 
   const createItemHandler = (item) => {
