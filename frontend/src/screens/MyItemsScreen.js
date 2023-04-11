@@ -7,6 +7,7 @@ import Loader from "../components/Loader";
 //import { listProducts } from "../actions/productActions";
 import { deleteItem, listMyItems } from "../actions/itemActions";
 import { ITEM_DELETE_RESET } from "../constants/itemConstants";
+import { listMyItemOrders, setIsBorrowedLenderConfirmed, setIsReturnedLenderConfirmed } from "../actions/orderActions";
 
 const MyItemsScreen = () => {
   // const { keyword, pageNumber } = useParams();
@@ -21,7 +22,11 @@ const MyItemsScreen = () => {
 
   const [message, setMessage] = useState(null);
   const itemList = useSelector((state) => state.itemMyList);
-  const { loading, error, items } = itemList;
+  const { loading1, error1, items } = itemList;
+
+  const orderItemList = useSelector((state) => state.orderItemList);
+  const { loading2, error2, orders } = orderItemList;
+  console.log("sup" + orders)
 
   if (itemList) {
     console.log(itemList);
@@ -50,6 +55,7 @@ const MyItemsScreen = () => {
       setMessage("Item deleted successfully");
     }
     dispatch(listMyItems(userInfo._id)); // Execute the action creator
+    dispatch(listMyItemOrders(userInfo._id))
     setMessage(null);
   }, [dispatch, userInfo, successDelete, navigate]);
 
@@ -57,24 +63,120 @@ const MyItemsScreen = () => {
     navigate('/addItem')
   }
 
+  const confirmItemBorrowedHandler = (order, orderItemId) => {
+    dispatch(setIsBorrowedLenderConfirmed(order, orderItemId));
+    navigate("/myItems")
+  }
+
+  const confirmItemReturnedHandler = (order, orderItemId) => {
+    dispatch(setIsReturnedLenderConfirmed(order, orderItemId));
+    navigate("/myItems")
+  }
+
   return (
-    <Row>
-      <Col>
-        <h2>My Items</h2>
+    <Col>
+      <Row>
+        <h2>Items placed on order</h2>
         {message && <Message variant="success">{message}</Message>}
-        <ListGroupItem>
-          <Button
-            onClick={createItemhandler}
-            className="btn-block"
-            type="button"
-          >
-            Add an Item
-          </Button>
-        </ListGroupItem>
-        {loading ? (
+        {loading2 ? (
           <Loader />
-        ) : error ? (
-          <Message variant="danger">{error}</Message>
+        ) : error2 ? (
+          <Message variant="danger">{error2}</Message>
+        ) : (
+          <Table striped bordered hover responsive className="table-sm">
+            <thead>
+              <tr>
+                <th>NAME</th>
+                <th>IMAGE</th>
+                <th>PRICE</th>
+                <th>USER</th>
+                <th>PAYMENT STATUS</th>
+                <th>BORROW STATUS</th>
+                <th>ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody>
+              {orders&& orders.map((order) => (order.orderItems.map((orderItem)=> (
+                orderItem.owner == userInfo._id && (
+                  <tr key={orderItem._id}>
+                    <td>{orderItem.name}</td>
+                    <td>
+                      <Image src={orderItem.image} alt={orderItem.name} fluid />
+                    </td>
+                    <td>{orderItem.price}</td>
+                    <td>{order.user}</td>
+                    <td>{order.isPaid ? "PAYMENT DONE" : "PAYMENT NOT DONE"}</td>
+                    <td>
+                    {
+                      orderItem.isBorrowed.lenderConfirmation ? (
+                        orderItem.isBorrowed.borrowerConfirmation ? (
+                          orderItem.isReturned.borrowerConfirmation ? (
+                            orderItem.isReturned.lenderConfirmation ? (
+                              "RETURNED"
+                            ) : (
+                              "AWAITING RETURN CONFIRMATION FROM LENDER"
+                            ) 
+                            ) : (
+                                "ON LOAN"
+                            )
+                        ) : (
+                            "AWAITING BORROW CONFIRMATION FROM BORROWER"
+                        )
+                    ) : (
+                        "AWAITING BORROW CONFIRMATION FROM LENDER"
+                    )
+                    }
+                    </td>
+                    <td>
+                      {
+                        orderItem.isBorrowed.lenderConfirmation ? (
+                          orderItem.isBorrowed.borrowerConfirmation ? (
+                            orderItem.isReturned.borrowerConfirmation ? (
+                              orderItem.isReturned.lenderConfirmation ? (
+                                ""
+                              ) : (
+                                <Button className='btn-sm' variant='light' onClick={() => confirmItemReturnedHandler(order, orderItem._id)}>
+                                  Confirm item returned
+                                </Button>
+                              ) 
+                              ) : (
+                                  ""
+                              )
+                          ) : (
+                              ""
+                          )
+                      ) : (
+                        <Button className='btn-sm' variant='light' onClick={() => confirmItemBorrowedHandler(order, orderItem._id)}>
+                          Lend item
+                        </Button>
+                      )
+                    }
+                    </td>
+                  </tr>
+                )
+              ))))}
+            </tbody>
+          </Table>
+        )}
+      </Row>
+      <Row>
+      <h2>My Items</h2>
+        {message && <Message variant="success">{message}</Message>}
+        <Col>
+          <ListGroupItem>
+            <Button
+              onClick={createItemhandler}
+              className="btn-block"
+              type="button"
+            >
+              Add an Item
+            </Button>
+          </ListGroupItem>
+        </Col>
+        {loading1 ? (
+          <Loader />
+        ) : error1 ? (
+          <Message variant="danger">{error1}</Message>
         ) : (
           <Table striped bordered hover responsive className="table-sm">
             <thead>
@@ -86,8 +188,8 @@ const MyItemsScreen = () => {
                 <th>DESCRIPTION</th>
                 <th>PRICE</th>
                 <th>DELETE</th>
-                <th>BORROW STATUS</th>
-                <th></th>
+                {/* <th>BORROW STATUS</th> */}
+                {/* <th>ACTIONS</th> */}
               </tr>
             </thead>
             <tbody>
@@ -101,16 +203,18 @@ const MyItemsScreen = () => {
                   <td>{item.category}</td>
                   <td>{item.description}</td>
                   <td>{item.pricePerDay}</td>
-                  <td>
-                    <Button
+                  <td>{
+                      !item.isOrderPlaced &&
+                      <Button
                       variant="danger"
                       onClick={() => deleteHandler(item._id)}
-                    >
+                      >
                       <i className="fas fa-trash">Delete</i>
-                    </Button>
+                      </Button>
+                    }
                   </td>
-                  <td>
-                  {item.isPlacedOrder ? (
+                  {/* <td>
+                  {item.isOrderPlaced ? (
                     item.isBorrowed.borrowerConfirmation ? (
                       item.isBorrowed.lenderConfirmation ? (
                         item.isReturned.borrowerConfirmation ? (
@@ -130,39 +234,39 @@ const MyItemsScreen = () => {
                   )
                     
                   }
-                  </td>
-                  <td>
-                  {item.isPlacedOrder ? (
+                  </td> */}
+                  {/* <td>
+                  {item.isOrderPlaced ? (
                     item.isBorrowed.borrowerConfirmation ? (
                       item.isBorrowed.lenderConfirmation ? (
                         item.isReturned.borrowerConfirmation ? (
                           item.isReturned.lenderConfirmation && 
-                              "RETURNED"
+                              ""
                           ) : (
                             <Button className='btn-sm' variant='light'>
                               Confirm Item Returned
                             </Button>
                           )
                       ) : (
-                          "ON LOAN"
+                          ""
                       )
                   ) : (
-                      "AWAITING BORROW CONFIRMATION FROM BORROWER"
+                      ""
                   )
                   ) : (
-                    <Button className='btn-sm' variant='light'>
-                      Borrow Item
+                    <Button className='btn-sm' variant='light' >
+                      Lend Item
                     </Button>
                   )
                   }
-                  </td>
+                  </td> */}
                 </tr>
               ))}
             </tbody>
           </Table>
         )}
-      </Col>
-    </Row>
+      </Row>
+    </Col>
   );
 };
 

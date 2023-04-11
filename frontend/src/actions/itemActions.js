@@ -18,7 +18,32 @@ import {
   ITEM_DELETE_RESET,
 } from "../constants/itemConstants";
 
-export const listItems =
+export const listItemsAvailable =
+  (keyword = "", pageNumber = "") =>
+  async (dispatch) => {
+    try {
+      dispatch({ type: ITEM_LIST_REQUEST });
+
+      const { data } = await axios.get(
+        `/api/items/available?keyword=${keyword}&pageNumber=${pageNumber}`
+      );
+
+      dispatch({
+        type: ITEM_LIST_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: ITEM_LIST_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };
+
+  export const listItems =
   (keyword = "", pageNumber = "") =>
   async (dispatch) => {
     try {

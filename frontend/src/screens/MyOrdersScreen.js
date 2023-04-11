@@ -6,6 +6,7 @@ import Loader from "../components/Loader";
 import { Table, Form, Button, Row, Col, Image } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap'
 import { listMyOrders } from '../actions/orderActions'
+import {setIsBorrowedBorrowerConfirmed, setIsReturnedBorrowerConfirmed} from '../actions/orderActions'
 
 
 const MyOrdersScreen = () => {
@@ -27,6 +28,16 @@ const MyOrdersScreen = () => {
         }
       }, [dispatch, navigate, userInfo]);
 
+    const confirmItemBorrowedHandler = (order, orderItemId) => {
+        dispatch(setIsBorrowedBorrowerConfirmed(order, orderItemId));
+        navigate("/myOrders")
+    }
+
+    const confirmItemReturnedHandler = (order, orderItemId) => {
+        dispatch(setIsReturnedBorrowerConfirmed(order, orderItemId));
+        navigate("/myOrders")
+    }
+
     const orderListMy = useSelector((state) => state.orderListMy)
     const { loading: loadingOrders, error: errorOrders, orders } = orderListMy
     console.log(orders)
@@ -45,9 +56,10 @@ const MyOrdersScreen = () => {
                     <th>NAME</th>
                     <th>IMAGE</th>
                     <th>DATE</th>
-                    <th>TOTAL</th>
+                    <th>PRICE</th>
                     <th>PAID DATE</th>
                     <th>BORROW STATUS</th>
+                    <th>ACTIONS</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -56,7 +68,7 @@ const MyOrdersScreen = () => {
                         <td>{orderItem.name}</td>
                         <td><Image src={orderItem.image} alt={"Unable to load photo"} fluid /></td>
                         <td>{order.createdAt.substring(0, 10)}</td>
-                        <td>{order.totalPrice}</td>
+                        <td>{orderItem.price}</td>
                         <td>
                             {order.isPaid ? (
                             order.paidAt.substring(0, 10)
@@ -66,44 +78,50 @@ const MyOrdersScreen = () => {
                         </td>
                         <td>
                             {
+                            orderItem.isBorrowed.lenderConfirmation ? (
                                 orderItem.isBorrowed.borrowerConfirmation ? (
-                                    orderItem.isBorrowed.lenderConfirmation ? (
-                                        orderItem.isReturned.borrowerConfirmation ? (
-                                            orderItem.isReturned.lenderConfirmation && 
-                                            "RETURNED"
-                                        ) : (
-                                            "AWAITING RETURNED CONFIRMATION FROM LENDER"
-                                        )
+                                    orderItem.isReturned.borrowerConfirmation ? (
+                                    orderItem.isReturned.lenderConfirmation ? (
+                                        "RETURNED"
+                                    ) : (
+                                        "AWAITING RETURN CONFIRMATION FROM LENDER"
+                                    ) 
                                     ) : (
                                         "ON LOAN"
                                     )
                                 ) : (
                                     "AWAITING BORROW CONFIRMATION FROM BORROWER"
                                 )
+                            ) : (
+                                "AWAITING BORROW CONFIRMATION FROM LENDER"
+                            )
                             }
                         </td>
                         <td>
                             <Row>
-                            {
-                                orderItem.isBorrowed.borrowerConfirmation ? (
+                                {
                                     orderItem.isBorrowed.lenderConfirmation ? (
-                                        orderItem.isReturned.borrowerConfirmation ? (
-                                            orderItem.isReturned.lenderConfirmation && 
-                                            "RETURNED"
+                                        orderItem.isBorrowed.borrowerConfirmation ? (
+                                          orderItem.isReturned.borrowerConfirmation ? (
+                                            orderItem.isReturned.lenderConfirmation ? (
+                                              ""
+                                            ) : (
+                                              ""
+                                            ) 
+                                            ) : (
+                                                <Button className='btn-sm' variant='light' onClick={() => confirmItemReturnedHandler(order, orderItem._id)}>
+                                                    Return item
+                                                </Button>
+                                            )
                                         ) : (
-                                            "AWAITING RETURNED CONFIRMATION FROM LENDER"
+                                            <Button className='btn-sm' variant='light' onClick={() => confirmItemBorrowedHandler(order, orderItem._id)}>
+                                                Confirm Item Borrowed
+                                            </Button>
                                         )
                                     ) : (
-                                        <Button className='btn-sm' variant='light'>
-                                            Confirm Item Returned
-                                        </Button>
+                                        ""
                                     )
-                                ) : (
-                                    <Button className='btn-sm' variant='light'>
-                                        Confirm Item Borrowed
-                                    </Button>
-                                )
-                            }
+                                }
                             </Row>
                             <br/>
                             <Row>

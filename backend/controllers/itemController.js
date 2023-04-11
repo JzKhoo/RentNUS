@@ -126,7 +126,12 @@ const updateItem = asyncHandler(async (req, res) => {
     category,
     description,
     pricePerDay,
+    startDate,
+    endDate,
     isOrderPlaced,
+    isBorrowed,
+    isReturned
+
   } = req.body;
 
   const renterObjectId = new mongoose.Types.ObjectId(renter);
@@ -141,7 +146,11 @@ const updateItem = asyncHandler(async (req, res) => {
         category: category,
         description: description,
         pricePerDay: pricePerDay,
+        startDate: startDate,
+        endDate: endDate,
         isOrderPlaced: isOrderPlaced,
+        isBorrowed: isBorrowed,
+        isReturned: isReturned,
       },
     },
     { new: true }
