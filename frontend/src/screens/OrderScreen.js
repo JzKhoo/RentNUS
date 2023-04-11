@@ -28,7 +28,7 @@ const OrderScreen = ({}) => {
 
   const orderDetails = useSelector((state) => state.orderDetails);
   const { order, loading, error } = orderDetails;
-  console.log(orderDetails)
+
   // get currentstate
 
   const orderPay = useSelector((state) => state.orderPay);

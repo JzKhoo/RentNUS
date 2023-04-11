@@ -15,6 +15,7 @@ const MyItemsScreen = () => {
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
+  console.log("userinfo" + !userInfo)
   // to check if user is logged in
 
   //   const orderListMy = useSelector((state) => state.orderListMy)
@@ -49,14 +50,15 @@ const MyItemsScreen = () => {
     if (!userInfo) {
       navigate("/login");
       // if not logged in
+    } else {
+      dispatch(listMyItems(userInfo._id)); // Execute the action creator
+      dispatch(listMyItemOrders(userInfo._id))
+      setMessage(null);
     }
     if (successDelete) {
       dispatch({ type: ITEM_DELETE_RESET });
       setMessage("Item deleted successfully");
     }
-    dispatch(listMyItems(userInfo._id)); // Execute the action creator
-    dispatch(listMyItemOrders(userInfo._id))
-    setMessage(null);
   }, [dispatch, userInfo, successDelete, navigate]);
 
   const createItemhandler = () => {

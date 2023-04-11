@@ -19,6 +19,10 @@ const MyOrdersScreen = () => {
     const { userInfo } = userLogin;
     // to check if user is logged in
 
+    const orderListMy = useSelector((state) => state.orderListMy)
+    const { loading: loadingOrders, error: errorOrders, orders } = orderListMy
+    console.log(orders)
+
     useEffect(() => {
         if (!userInfo) {
           navigate("/login");
@@ -38,9 +42,7 @@ const MyOrdersScreen = () => {
         navigate("/myOrders")
     }
 
-    const orderListMy = useSelector((state) => state.orderListMy)
-    const { loading: loadingOrders, error: errorOrders, orders } = orderListMy
-    console.log(orders)
+
     return (
         <Row>
             <Col>
