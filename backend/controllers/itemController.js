@@ -118,30 +118,57 @@ const addItem = asyncHandler(async (req, res) => {
 // @access Private/Admin
 
 const updateItem = asyncHandler(async (req, res) => {
+  const {
+    _id,
+    renter,
+    name,
+    brand,
+    category,
+    description,
+    pricePerDay,
+    startDate,
+    endDate,
+    isOrderPlaced,
+    isBorrowed,
+    isReturned
+
+  } = req.body;
 
   const item = await Item.findById(req.params.id)
 
-  if (item) {
-    item.name = req.body.name || item.name,
-    item.brand = req.body.brand || item.brand,
-    item.category = req.body.category || item.category,
-    item.description = req.body.description || item.description,
-    item.pricePerDay = req.body.pricePerDay || item.pricePerDay,
-    item.isOrderPlaced = req.body.isOrderPlaced || item.isOrderPlaced
+  const updatedItem = await Item.findOneAndUpdate(
+    { _id: req.params.id },
+    {
+      $set: {
+        renter: renterObjectId,
+        name: name,
+        brand: brand,
+        category: category,
+        description: description,
+        pricePerDay: pricePerDay,
+        startDate: startDate,
+        endDate: endDate,
+        isOrderPlaced: isOrderPlaced,
+        isBorrowed: isBorrowed,
+        isReturned: isReturned,
+      },
+    },
+    { new: true }
+  );
 
-    const updatedItem = await item.save()
-    res.json({
-      name: updateItem.name,
-      brand: updateItem.brand,
-      category: updateItem.category,
-      description: updateItem.description,
-      pricePerDay: updateItem.pricePerDay,
-      isOrderPlaced: updateItem.isOrderPlaced
-    })
-  } else {
-    res.status(404)
-    throw new Error('Item not found')
-  }
+  //   const updatedItem = await item.save()
+  //   res.json({
+  //     name: updateItem.name,
+  //     brand: updateItem.brand,
+  //     category: updateItem.category,
+  //     description: updateItem.description,
+  //     pricePerDay: updateItem.pricePerDay,
+  //     isOrderPlaced: updateItem.isOrderPlaced
+  //   })
+  // } else {
+  //   res.status(404)
+  //   throw new Error('Item not found')
+  // }
 
   // const renterObjectId = new mongoose.Types.ObjectId(renter)
 

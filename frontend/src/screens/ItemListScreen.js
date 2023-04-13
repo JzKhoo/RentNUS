@@ -74,11 +74,11 @@ const ItemListScreen = ({ history }) => {
                 <td>{item.category}</td>
                 <td>{item.brand}</td>
                 <td>
-                  <LinkContainer to={`/admin/item/${item._id}/edit`}>
+                  {/* <LinkContainer to={`/admin/item/${item._id}/edit`}>
                     <Button variant='light' className='btn-sm'>
                       <i className='fas fa-edit'></i>
                     </Button>
-                  </LinkContainer>
+                  </LinkContainer> */}
                   <Button
                     variant='danger'
                     className='btn-sm'

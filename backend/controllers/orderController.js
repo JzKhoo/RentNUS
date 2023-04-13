@@ -2,6 +2,7 @@ import asyncHandler from "express-async-handler";
 import Order from "../models/orderModel.js";
 import Item from "../models/itemModel.js";
 import User from "../models/userModel.js";
+import mongoose from "mongoose";
 
 // @desc    Create new order
 // @route   POST /api/orders
@@ -54,10 +55,11 @@ const addOrderItems = asyncHandler(async (req, res) => {
 // @route   GET /api/orders/:id
 // @access  Private
 const getOrderById = asyncHandler(async (req, res) => {
-  const order = await Order.findById(req.params.id).populate(
-    "user",
-    "name email" // get name and email of a user tagged to order
-  );
+  const order = await Order.findById(req.params.id)
+  // .populate(
+  //   "user",
+  //   "name email" // get name and email of a user tagged to order
+  // );
 
   if (order) {
     res.json(order);
@@ -65,6 +67,71 @@ const getOrderById = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error("Order not found");
   }
+});
+
+const updateOrder = asyncHandler(async (req, res) => {
+  const {
+    orderItems,
+    shippingAddress,
+    paymentMethod,
+    taxPrice,
+    shippingPrice,
+    totalPrice,
+    isPaid,
+    createdAt,
+    updatedAt,
+    paidAt,
+    paymentResult
+  } = req.body;
+
+  // const userObjectId = new mongoose.Types.ObjectId(user);
+
+  const updatedOrder = await Order.findOneAndUpdate(
+    { _id: req.params.id },
+    {
+      $set: {
+        orderItems: orderItems,
+        shippingAddress: shippingAddress,
+        paymentMethod: paymentMethod,
+        taxPrice: taxPrice,
+        shippingPrice: shippingPrice,
+        totalPrice: totalPrice,
+        isPaid: isPaid,
+        createdAt: createdAt,
+        updatedAt: updatedAt,
+        paidAt: paidAt,
+        paymentResult: paymentResult,
+      },
+    },
+    { new: true }
+  );
+
+  if (updatedOrder) {
+    res.json(updatedOrder);
+  } else {
+    res.status(404);
+    throw new Error("Order not found");
+  }
+  // const order = await Order.findById(req.params.orderId);  
+  // console.log("order: "+ order.orderItems);
+
+  // const updatedOrder = await Order.updateOne(
+  //   { _id: req.params.orderId},
+  //   {
+  //     $set: {
+  //       "orderItems.$.isBorrowed": isBorrowed,
+  //     },
+  //   },
+  // );
+
+  // console.log("Updated order: "+ updatedOrder.orderItems);
+
+  // if (updatedOrder) {
+  //   res.json(updatedOrder);
+  // } else {
+  //   res.status(404);
+  //   throw new Error("Item not found");
+  // }
 });
 
 // @desc    Update order to paid
@@ -121,6 +188,15 @@ const getMyOrders = asyncHandler(async (req, res) => {
   res.json(orders);
 });
 
+// @desc    Get logged in user orders
+// @route   GET /api/orders/myorders
+// @access  Private
+
+const getMyItemOrders = asyncHandler(async (req, res) => {
+  const orders = await Order.find({ 'orderItems.owner': req.params.userId });
+  res.json(orders);
+});
+
 // @desc    Get all orders
 // @route   GET /api/orders
 // @access  Private/Admin
@@ -136,4 +212,6 @@ export {
   updateOrderToDelivered,
   getMyOrders,
   getOrders,
+  updateOrder,
+  getMyItemOrders,
 };

@@ -13,13 +13,18 @@ const orderSchema = mongoose.Schema(
         qty: { type: Number, required: true },
         image: { type: String, required: true },
         price: { type: Number, required: true },
-        isBorrowed: { borrowerConfirmation: {type: Boolean, required: true}, lenderConfirmation: {type: Boolean, required: true}},
-        isReturned: { borrowerConfirmation: {type: Boolean, required: true}, lenderConfirmation: {type: Boolean, required: true}},
+        isBorrowed: { borrowerConfirmation: {type: Boolean, required: false, default: false}, lenderConfirmation: {type: Boolean, required: false, default: false}},
+        isReturned: { borrowerConfirmation: {type: Boolean, required: false, default: false}, lenderConfirmation: {type: Boolean, required: false, default: false}},
         item: {
           type: mongoose.Schema.Types.ObjectId,
           required: true,
           ref: "Item",
         },
+        owner: {
+          type: mongoose.Schema.Types.ObjectId,
+          required: true,
+          ref: "User"
+        }
       },
     ], 
     shippingAddress: {

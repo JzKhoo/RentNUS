@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Row, Col } from "react-bootstrap";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
-import { listItems } from "../actions/itemActions";
+import { listItemsAvailable } from "../actions/itemActions";
 import Item from "../components/Item";
 // import Product from "../components/Product";
 // import { listProducts } from "../actions/productActions";
@@ -20,7 +20,7 @@ const HomeScreen = () => {
   console.log(itemList)
 
   useEffect(() => {
-    dispatch(listItems(keyword, pageNumber)); // 1. fire off action to get products
+    dispatch(listItemsAvailable(keyword, pageNumber)); // 1. fire off action to get products
   }, [dispatch, keyword, pageNumber]);
 
   return (
