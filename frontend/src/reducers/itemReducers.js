@@ -8,6 +8,7 @@ import {
   ITEM_ADD_REQUEST,
   ITEM_ADD_SUCCESS,
   ITEM_ADD_FAIL,
+  ITEM_ADD_RESET,
   ITEM_DETAILS_REQUEST,
   ITEM_DETAILS_SUCCESS,
   ITEM_DETAILS_FAIL,
@@ -17,7 +18,7 @@ import {
   ITEM_UPDATE_REQUEST,
   ITEM_UPDATE_SUCCESS,
   ITEM_UPDATE_FAIL,
-  ITEM_UPDATE_RESET
+  ITEM_UPDATE_RESET,
 } from '../constants/itemConstants'
 
 export const itemListReducer = (state = { items: [] }, action) => {
@@ -56,7 +57,6 @@ export const itemMyListReducer = (state = { items: [] }, action) => {
   }
 }
 
-// not sure if i need item inside the state = { item }
 export const itemDetailsReducer = (state = { item: {} }, action) => {
   switch (action.type) {
     case ITEM_DETAILS_REQUEST:
@@ -78,12 +78,14 @@ export const itemAddReducer = (state = {}, action) => {
       return { loading: false, itemInfo: action.payload }
     case ITEM_ADD_FAIL:
       return { loading: false, error: action.payload }
+    case ITEM_ADD_RESET:
+      return {}
     default:
       return state
   }
 }
 
-export const itemDeleteReducer = (state = { }, action) => {
+export const itemDeleteReducer = (state = {}, action) => {
   switch (action.type) {
     case ITEM_DELETE_REQUEST:
       return { loading: true }
