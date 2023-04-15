@@ -66,6 +66,7 @@ const ItemScreen = ({ history, match }) => {
       createItemReview(id, rating, comment
       )
     )
+    navigate(`/items/${id}`)
   }
 
   const calculateTotalCost = (start, end, pricePerDay) => {

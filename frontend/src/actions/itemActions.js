@@ -235,19 +235,19 @@ export const createItemReview =
 
       var dataInput = JSON.stringify({
         rating: rating,
-        comment: comment
+        comment: comment,
       })
 
       var config = {
-        method: 'put',
-        url: `/api/items/${itemId}/reviews`,
+        method: 'post',
+        url: `/api/items/reviews/${itemId}`,
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${userInfo.token}`,
         },
         data: dataInput,
       }
-      axios(config)
+      await axios(config)
 
       dispatch({ type: ITEM_CREATE_REVIEW_SUCCESS })
     } catch (error) {

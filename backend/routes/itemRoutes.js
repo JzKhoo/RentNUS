@@ -33,7 +33,7 @@ const upload = multer({ storage })
 
 router.route('/').get(getItems)
 router.route('/available').get(getItemsAvailable)
-router.route('/:id/reviews').post(protect, createItemReview)
+router.route('/reviews/:id').post(protect, createItemReview)
 
 router
   .route('/:id')
