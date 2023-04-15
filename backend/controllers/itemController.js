@@ -77,8 +77,9 @@ const addItem = asyncHandler(async (req, res) => {
   } = req.body
 
   // const image = "/images/test_image.jpg";
-  const image = req.file.path.replace("frontend\\public\\images\\" , '/images/')
-
+  console.log(req.file.path)
+  const image = req.file.path.replace("frontend/public/images/" , '/images/')
+  
   //item doesnt have to be unique
 
   const item = await Item.create({
@@ -295,6 +296,48 @@ const deleteItem = asyncHandler(async (req, res) => {
   }
 })
 
+// @desc Create new review
+// @route POST /api/items/:id/reviews
+// @access Private
+const createItemReview = asyncHandler(async (req, res) => {
+  const { rating, comment } = req.body
+  console.log(rating, comment)
+
+  const item = await Item.findById(req.params.id)
+
+  if (item) {
+    const alreadyReviewed = item.reviews.find(
+      (r) => r.user.toString() === req.user._id.toString()
+    )
+
+    if (alreadyReviewed) {
+      res.status(400)
+      throw new Error('Item already reviewed')
+    }
+
+    const review = {
+      name: req.user.name,
+      rating: Number(rating),
+      comment,
+      user: req.user._id,
+    }
+
+    item.reviews.push(review)
+
+    item.numReviews = item.reviews.length
+
+    item.rating =
+      item.reviews.reduce((acc, item) => item.rating + acc, 0) /
+      item.reviews.length
+
+    await item.save()
+    res.status(201).json({ message: 'Review added' })
+  } else {
+    res.status(404)
+    throw new Error('Item not found')
+  }
+})
+
 
 export {
   getItems,
@@ -306,4 +349,5 @@ export {
   getItemsByOwnerId,
   getItemsByRenterId,
   deleteItem,
+  createItemReview
 }
