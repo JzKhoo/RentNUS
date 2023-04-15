@@ -18,7 +18,7 @@ import {
 
 const storage = multer.diskStorage({
   destination(req, file, cb) {
-    cb(null, 'frontend/public/uploads/')
+    cb(null, 'frontend/public/images/')
   },
   filename(req, file, cb) {
     cb(
@@ -38,8 +38,8 @@ router.route('/:id').get(getItemsById).delete(protect, admin, deleteItem).put(pr
 router.route('/create').post(protect, upload.single('image'), addItem)
 
 //might need to add protect?
-router.route('/:id').delete(deleteItemsById)
-router.route('/:id').put(updateItem)
+router.route('/delete/:id').delete(protect, deleteItemsById)
+router.route('/updateitem/:id').put(protect, updateItem)
 
 router.route('/owner/:ownerId').get(getItemsByOwnerId)
 router.route('/renter/:renterId').get(getItemsByRenterId)

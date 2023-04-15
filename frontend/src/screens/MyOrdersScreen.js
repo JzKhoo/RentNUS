@@ -65,7 +65,7 @@ const MyOrdersScreen = () => {
                 </tr>
                 </thead>
                 <tbody>
-                {orders.map((order) => (order.orderItems.map((orderItem) => (
+                {orders.length > 0 ? (orders.map((order) => (order.orderItems.map((orderItem) => (
                         <tr key={orderItem._id}>
                         <td>{orderItem.name}</td>
                         <td><Image src={orderItem.image} alt={"Unable to load photo"} fluid /></td>
@@ -136,7 +136,7 @@ const MyOrdersScreen = () => {
                         </td>
                         </tr>
                     )
-                )))}
+                )))) : (<td colSpan={8}>"No items ordered"</td>)}
                 </tbody>
             </Table>
             )}

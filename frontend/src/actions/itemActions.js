@@ -132,7 +132,7 @@ export const addItem = (formData) => async (dispatch, getState) => {
       },
     }
 
-    const { data } = await axios.post('/api/items', formData, config)
+    const { data } = await axios.post('/api/items/create', formData, config)
 
     dispatch({ type: ITEM_ADD_SUCCESS, payload: data })
     localStorage.setItem('itemInfo', JSON.stringify(data))
@@ -157,13 +157,24 @@ export const deleteItem = (id) => async (dispatch, getState) => {
       userLogin: { userInfo },
     } = getState()
 
-    const config = {
-      headers: {
+    var config = {
+      method: 'delete',
+      url: `/api/items/delete/${id}`,
+      headers: { 
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${userInfo.token}`,
-      },
-    }
+      }
+    };
+    await axios(config)
 
-    await axios.delete(`/api/items/${id}`, config)
+
+    // const config = {
+    //   headers: {
+    //     Authorization: `Bearer ${userInfo.token}`,
+    //   },
+    // }
+
+    // await axios.delete(`/api/items/${id}`, config)
 
     dispatch({
       type: ITEM_DELETE_SUCCESS,
@@ -179,7 +190,7 @@ export const deleteItem = (id) => async (dispatch, getState) => {
   }
 }
 
-export const updateItem = (item) => async (dispatch, getState) => {
+export const updateItem = (itemId, item) => async (dispatch, getState) => {
   try {
     dispatch({ 
       type: ITEM_UPDATE_REQUEST
@@ -189,14 +200,38 @@ export const updateItem = (item) => async (dispatch, getState) => {
       userLogin: { userInfo },
     } = getState()
 
-    const config = {
-      headers: {
-        'Content-Type': 'application.json',
+    // const config = {
+    //   headers: {
+    //     'Content-Type': 'application.json',
+    //     Authorization: `Bearer ${userInfo.token}`,
+    //   },
+    // }
+
+    // const { data } = await axios.put(`/api/items/${itemId}`, formData, config)
+
+    var dataInput = JSON.stringify({
+      "name": item.name,
+      "brand": item.brand,
+      "category": item.category,
+      "description": item.description,
+      "pricePerDay": item.pricePerDay,
+      "startDate": item.startDate,
+      "endDate": item.endDate
+
+    });
+
+    console.log("form data:" + item.name)
+    
+    var config = {
+      method: 'put',
+      url: `/api/items/updateitem/${itemId}`,
+      headers: { 
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${userInfo.token}`,
       },
-    }
-
-    const { data } = await axios.put(`/api/items/${item._id}`, item, config)
+      data : dataInput
+    };
+    const { data } = axios(config)
 
     dispatch({ type: ITEM_UPDATE_SUCCESS })
     

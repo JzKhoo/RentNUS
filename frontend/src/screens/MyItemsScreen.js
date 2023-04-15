@@ -15,7 +15,7 @@ const MyItemsScreen = () => {
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
-  console.log("userinfo" + !userInfo)
+  
   // to check if user is logged in
 
   //   const orderListMy = useSelector((state) => state.orderListMy)
@@ -24,6 +24,7 @@ const MyItemsScreen = () => {
   const [message, setMessage] = useState(null);
   const itemList = useSelector((state) => state.itemMyList);
   const { loading1, error1, items } = itemList;
+  console.log("userinfo" + items)
 
   const orderItemList = useSelector((state) => state.orderItemList);
   const { loading2, error2, orders } = orderItemList;
@@ -45,6 +46,10 @@ const MyItemsScreen = () => {
       dispatch(deleteItem(id)).then(() => dispatch(listMyItems(userInfo._id))); // add this line
     }
   };
+
+  const updateHandler =(itemId) => {
+    navigate(`/updateitem/${itemId}`)
+  }
 
   useEffect(() => {
     if (!userInfo) {
@@ -79,7 +84,7 @@ const MyItemsScreen = () => {
     <Col>
       <Row>
         <h2>Items placed on order</h2>
-        {message && <Message variant="success">{message}</Message>}
+        {/* {message && <Message variant="success">{message}</Message>} */}
         {loading2 ? (
           <Loader />
         ) : error2 ? (
@@ -98,7 +103,7 @@ const MyItemsScreen = () => {
               </tr>
             </thead>
             <tbody>
-              {orders&& orders.map((order) => (order.orderItems.map((orderItem)=> (
+              {orders.length > 0 ? (orders.map((order) => (order.orderItems.map((orderItem)=> (
                 orderItem.owner == userInfo._id && (
                   <tr key={orderItem._id}>
                     <td>{orderItem.name}</td>
@@ -156,7 +161,7 @@ const MyItemsScreen = () => {
                     </td>
                   </tr>
                 )
-              ))))}
+              ))))): (<td colSpan={7}> No items placed for order</td>)}
             </tbody>
           </Table>
         )}
@@ -190,12 +195,13 @@ const MyItemsScreen = () => {
                 <th>DESCRIPTION</th>
                 <th>PRICE</th>
                 <th>DELETE</th>
+                <th>UPDATE</th>
                 {/* <th>BORROW STATUS</th> */}
                 {/* <th>ACTIONS</th> */}
               </tr>
             </thead>
             <tbody>
-              {items.map((item) => (
+              {items.length > 0 ? (items.map((item) => (
                 <tr key={item._id}>
                   <td>{item.name}</td>
                   <td>
@@ -215,55 +221,16 @@ const MyItemsScreen = () => {
                       </Button>
                     }
                   </td>
-                  {/* <td>
-                  {item.isOrderPlaced ? (
-                    item.isBorrowed.borrowerConfirmation ? (
-                      item.isBorrowed.lenderConfirmation ? (
-                        item.isReturned.borrowerConfirmation ? (
-                          item.isReturned.lenderConfirmation && 
-                              "RETURNED"
-                          ) : (
-                              "AWAITING RETURNED CONFIRMATION FROM LENDER"
-                          )
-                      ) : (
-                          "ON LOAN"
-                      )
-                  ) : (
-                      "AWAITING BORROW CONFIRMATION FROM BORROWER"
-                  )
-                  ) : (
-                    "NOT ON LOAN"
-                  )
-                    
-                  }
-                  </td> */}
-                  {/* <td>
-                  {item.isOrderPlaced ? (
-                    item.isBorrowed.borrowerConfirmation ? (
-                      item.isBorrowed.lenderConfirmation ? (
-                        item.isReturned.borrowerConfirmation ? (
-                          item.isReturned.lenderConfirmation && 
-                              ""
-                          ) : (
-                            <Button className='btn-sm' variant='light'>
-                              Confirm Item Returned
-                            </Button>
-                          )
-                      ) : (
-                          ""
-                      )
-                  ) : (
-                      ""
-                  )
-                  ) : (
-                    <Button className='btn-sm' variant='light' >
-                      Lend Item
+                  <td>
+                    <Button
+                      variant="danger"
+                      onClick={() => updateHandler(item._id)}
+                      >
+                      <i>Update Item</i>
                     </Button>
-                  )
-                  }
-                  </td> */}
+                  </td>
                 </tr>
-              ))}
+              ))) : (<td colSpan={8}> No items added</td>)}
             </tbody>
           </Table>
         )}

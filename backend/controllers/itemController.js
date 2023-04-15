@@ -77,7 +77,7 @@ const addItem = asyncHandler(async (req, res) => {
   } = req.body
 
   // const image = "/images/test_image.jpg";
-  const image = req.file.path.replace('frontend/public', '')
+  const image = req.file.path.replace("frontend\\public\\images\\" , '/images/')
 
   //item doesnt have to be unique
 
@@ -118,9 +118,26 @@ const addItem = asyncHandler(async (req, res) => {
 // @access Private/Admin
 
 const updateItem = asyncHandler(async (req, res) => {
+  // const {
+  //   _id,
+  //   renter,
+  //   name,
+  //   brand,
+  //   category,
+  //   description,
+  //   pricePerDay,
+  //   startDate,
+  //   endDate,
+  //   isOrderPlaced,
+  //   isBorrowed,
+  //   isReturned
+
+  // } = req.body;
+
+  // const item = await Item.findById(req.params.id)
+
   const {
-    _id,
-    renter,
+    owner,
     name,
     brand,
     category,
@@ -128,19 +145,16 @@ const updateItem = asyncHandler(async (req, res) => {
     pricePerDay,
     startDate,
     endDate,
-    isOrderPlaced,
-    isBorrowed,
-    isReturned
+  } = req.body
+  console.log(name)
 
-  } = req.body;
-
-  const item = await Item.findById(req.params.id)
+  // const image = "/images/test_image.jpg";
+  // const image = req.file.path.replace('frontend/public', '')
 
   const updatedItem = await Item.findOneAndUpdate(
     { _id: req.params.id },
     {
       $set: {
-        renter: renterObjectId,
         name: name,
         brand: brand,
         category: category,
@@ -148,9 +162,6 @@ const updateItem = asyncHandler(async (req, res) => {
         pricePerDay: pricePerDay,
         startDate: startDate,
         endDate: endDate,
-        isOrderPlaced: isOrderPlaced,
-        isBorrowed: isBorrowed,
-        isReturned: isReturned,
       },
     },
     { new: true }
@@ -188,12 +199,12 @@ const updateItem = asyncHandler(async (req, res) => {
   //   { new: true }
   // )
 
-  // if (updatedItem) {
-  //   res.json(updatedItem)
-  // } else {
-  //   res.status(404)
-  //   throw new Error('Item not found')
-  // }
+  if (updatedItem) {
+    res.json(updatedItem)
+  } else {
+    res.status(404)
+    throw new Error('Item not found')
+  }
 })
 
 // @desc fetch all AVAILABLE rental Items isOrderPlaced == false in batches of 5
@@ -246,8 +257,9 @@ const getItemsByOwnerId = asyncHandler(async (req, res) => {
   if (items.length > 0) {
     res.json({ items: items, pages: pages, page: page })
   } else {
-    res.status(404)
-    throw new Error('No items found for this owner')
+    res.json({ items: [], pages: 0, page: 0 })
+    // res.status(404)
+    // throw new Error('No items found for this owner')
   }
 })
 
