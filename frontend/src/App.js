@@ -23,6 +23,7 @@ import MyOrdersScreen from './screens/MyOrdersScreen'
 import ItemListScreen from './screens/ItemListScreen'
 import ItemEditScreen from './screens/ItemEditScreen'
 import UpdateItemScreen from './screens/UpdateItemScreen'
+import OrderListScreen from './screens/OrderListScreen'
 
 function App() {
   return (
@@ -96,6 +97,9 @@ function App() {
           </Routes>
           <Routes>
             <Route path='/admin/userlist' element={<UserListScreen />} exact />
+          </Routes>
+          <Routes>
+            <Route path='/admin/orderlist' element={<OrderListScreen />} exact />
           </Routes>
           <Routes>
             <Route

@@ -27,7 +27,7 @@ import {
   IS_BORROWED_BORROWER_FAIL,
   ORDER_MY_ITEM_REQUEST,
   ORDER_MY_ITEM_SUCCESS,
-  ORDER_MY_ITEM_FAIL
+  ORDER_MY_ITEM_FAIL,
 } from '../constants/orderConstants'
 import { logout } from './userActions'
 
@@ -92,7 +92,7 @@ export const getOrderDetails = (id) => async (dispatch, getState) => {
     }
 
     const { data } = await axios.get(`/api/orders/myorders/${id}`, config)
-    
+
     dispatch({
       type: ORDER_DETAILS_SUCCESS,
       payload: data,
@@ -112,50 +112,48 @@ export const getOrderDetails = (id) => async (dispatch, getState) => {
   }
 }
 //payment res from paypal
-export const payOrder = (orderId, paymentResult) => async (
-  dispatch,
-  getState
-) => {
-  try {
-    dispatch({
-      type: ORDER_PAY_REQUEST,
-    })
+export const payOrder =
+  (orderId, paymentResult) => async (dispatch, getState) => {
+    try {
+      dispatch({
+        type: ORDER_PAY_REQUEST,
+      })
 
-    const {
-      userLogin: { userInfo },
-    } = getState()
+      const {
+        userLogin: { userInfo },
+      } = getState()
 
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${userInfo.token}`,
-      },
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      }
+
+      const { data } = await axios.put(
+        `/api/orders/${orderId}/pay`,
+        paymentResult,
+        config
+      )
+
+      dispatch({
+        type: ORDER_PAY_SUCCESS,
+        payload: data,
+      })
+    } catch (error) {
+      const message =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+      if (message === 'Not authorized, token failed') {
+        dispatch(logout())
+      }
+      dispatch({
+        type: ORDER_PAY_FAIL,
+        payload: message,
+      })
     }
-
-    const { data } = await axios.put(
-      `/api/orders/${orderId}/pay`,
-      paymentResult,
-      config
-    )
-
-    dispatch({
-      type: ORDER_PAY_SUCCESS,
-      payload: data,
-    })
-  } catch (error) {
-    const message =
-      error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message
-    if (message === 'Not authorized, token failed') {
-      dispatch(logout())
-    }
-    dispatch({
-      type: ORDER_PAY_FAIL,
-      payload: message,
-    })
   }
-}
 
 // export const deliverOrder = (order) => async (dispatch, getState) => {
 //   try {
@@ -235,42 +233,42 @@ export const listMyOrders = () => async (dispatch, getState) => {
   }
 }
 
-// export const listOrders = () => async (dispatch, getState) => {
-//   try {
-//     dispatch({
-//       type: ORDER_LIST_REQUEST,
-//     })
+export const listOrders = () => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: ORDER_LIST_REQUEST,
+    })
 
-//     const {
-//       userLogin: { userInfo },
-//     } = getState()
+    const {
+      userLogin: { userInfo },
+    } = getState()
 
-//     const config = {
-//       headers: {
-//         Authorization: `Bearer ${userInfo.token}`,
-//       },
-//     }
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
 
-//     const { data } = await axios.get(`/api/orders`, config)
+    const { data } = await axios.get(`/api/orders`, config)
 
-//     dispatch({
-//       type: ORDER_LIST_SUCCESS,
-//       payload: data,
-//     })
-//   } catch (error) {
-//     const message =
-//       error.response && error.response.data.message
-//         ? error.response.data.message
-//         : error.message
-//     if (message === 'Not authorized, token failed') {
-//       dispatch(logout())
-//     }
-//     dispatch({
-//       type: ORDER_LIST_FAIL,
-//       payload: message,
-//     })
-//   }
-// }
+    dispatch({
+      type: ORDER_LIST_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message
+    if (message === 'Not authorized, token failed') {
+      dispatch(logout())
+    }
+    dispatch({
+      type: ORDER_LIST_FAIL,
+      payload: message,
+    })
+  }
+}
 
 export const listMyItemOrders = (userId) => async (dispatch, getState) => {
   try {
@@ -292,7 +290,7 @@ export const listMyItemOrders = (userId) => async (dispatch, getState) => {
     dispatch({
       type: ORDER_MY_ITEM_SUCCESS,
       payload: {
-        orders : data,
+        orders: data,
       },
     })
   } catch (error) {
@@ -310,151 +308,170 @@ export const listMyItemOrders = (userId) => async (dispatch, getState) => {
   }
 }
 
+export const setIsBorrowedBorrowerConfirmed =
+  (order, orderItemId) => async (dispatch, getState) => {
+    try {
+      dispatch({ type: IS_BORROWED_BORROWER_REQUEST })
 
-export const setIsBorrowedBorrowerConfirmed = (order, orderItemId) => async (dispatch, getState) => {
-  try {
-    dispatch({ type: IS_BORROWED_BORROWER_REQUEST });
+      const {
+        userLogin: { userInfo },
+      } = getState()
 
-    const {
-      userLogin: { userInfo },
-    } = getState();
+      order.orderItems.map((orderItem) =>
+        orderItem._id == orderItemId
+          ? (orderItem.isBorrowed.borrowerConfirmation = true)
+          : orderItem
+      )
 
-    order.orderItems.map((orderItem) => (orderItem._id==orderItemId? (orderItem.isBorrowed.borrowerConfirmation=true): orderItem))
+      var dataInput = JSON.stringify({
+        orderItems: order.orderItems,
+      })
 
-    var dataInput = JSON.stringify({
-      "orderItems": order.orderItems
-    });
-    
-    var config = {
-      method: 'put',
-      url: `/api/orders/${order._id}`,
-      headers: { 
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-      data : dataInput
-    };
-    const { data } = axios(config)
-    
-    dispatch({ type: IS_BORROWED_BORROWER_SUCCESS, payload: data });
-  } catch (error) {
-    dispatch({
-      type: IS_BORROWED_BORROWER_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
-    });
+      var config = {
+        method: 'put',
+        url: `/api/orders/${order._id}`,
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+        data: dataInput,
+      }
+      const { data } = axios(config)
+
+      dispatch({ type: IS_BORROWED_BORROWER_SUCCESS, payload: data })
+    } catch (error) {
+      dispatch({
+        type: IS_BORROWED_BORROWER_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      })
+    }
   }
-};
 
-export const setIsBorrowedLenderConfirmed = (order, orderItemId) => async (dispatch, getState) => {
-  try {
-    dispatch({ type: IS_BORROWED_LENDER_REQUEST });
+export const setIsBorrowedLenderConfirmed =
+  (order, orderItemId) => async (dispatch, getState) => {
+    try {
+      dispatch({ type: IS_BORROWED_LENDER_REQUEST })
 
-    const {
-      userLogin: { userInfo },
-    } = getState();
+      const {
+        userLogin: { userInfo },
+      } = getState()
 
-    order.orderItems.map((orderItem) => (orderItem._id==orderItemId? (orderItem.isBorrowed.lenderConfirmation=true): orderItem))
+      order.orderItems.map((orderItem) =>
+        orderItem._id == orderItemId
+          ? (orderItem.isBorrowed.lenderConfirmation = true)
+          : orderItem
+      )
 
-    var dataInput = JSON.stringify({
-      "orderItems": order.orderItems
-    });
-    
-    var config = {
-      method: 'put',
-      url: `/api/orders/${order._id}`,
-      headers: { 
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-      data : dataInput
-    };
-    const { data } = axios(config)
-    
-    dispatch({ type: IS_BORROWED_LENDER_SUCCESS, payload: data });
-  } catch (error) {
-    dispatch({
-      type: IS_BORROWED_LENDER_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
-    });
+      var dataInput = JSON.stringify({
+        orderItems: order.orderItems,
+      })
+
+      var config = {
+        method: 'put',
+        url: `/api/orders/${order._id}`,
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+        data: dataInput,
+      }
+      const { data } = axios(config)
+
+      dispatch({ type: IS_BORROWED_LENDER_SUCCESS, payload: data })
+    } catch (error) {
+      dispatch({
+        type: IS_BORROWED_LENDER_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      })
+    }
   }
-};
 
-export const setIsReturnedBorrowerConfirmed = (order, orderItemId) => async (dispatch, getState) => {
-  try {
-    dispatch({ type: IS_BORROWED_BORROWER_REQUEST });
+export const setIsReturnedBorrowerConfirmed =
+  (order, orderItemId) => async (dispatch, getState) => {
+    try {
+      dispatch({ type: IS_BORROWED_BORROWER_REQUEST })
 
-    const {
-      userLogin: { userInfo },
-    } = getState();
+      const {
+        userLogin: { userInfo },
+      } = getState()
 
-    order.orderItems.map((orderItem) => (orderItem._id==orderItemId? (orderItem.isReturned.borrowerConfirmation=true): orderItem))
+      order.orderItems.map((orderItem) =>
+        orderItem._id == orderItemId
+          ? (orderItem.isReturned.borrowerConfirmation = true)
+          : orderItem
+      )
 
-    var dataInput = JSON.stringify({
-      "orderItems": order.orderItems
-    });
-    
-    var config = {
-      method: 'put',
-      url: `/api/orders/${order._id}`,
-      headers: { 
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-      data : dataInput
-    };
-    const { data } = axios(config)
-    
-    dispatch({ type: IS_BORROWED_BORROWER_SUCCESS, payload: data });
-  } catch (error) {
-    dispatch({
-      type: IS_BORROWED_BORROWER_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
-    });
+      var dataInput = JSON.stringify({
+        orderItems: order.orderItems,
+      })
+
+      var config = {
+        method: 'put',
+        url: `/api/orders/${order._id}`,
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+        data: dataInput,
+      }
+      const { data } = axios(config)
+
+      dispatch({ type: IS_BORROWED_BORROWER_SUCCESS, payload: data })
+    } catch (error) {
+      dispatch({
+        type: IS_BORROWED_BORROWER_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      })
+    }
   }
-};
 
-export const setIsReturnedLenderConfirmed = (order, orderItemId) => async (dispatch, getState) => {
-  try {
-    dispatch({ type: IS_BORROWED_BORROWER_REQUEST });
+export const setIsReturnedLenderConfirmed =
+  (order, orderItemId) => async (dispatch, getState) => {
+    try {
+      dispatch({ type: IS_BORROWED_BORROWER_REQUEST })
 
-    const {
-      userLogin: { userInfo },
-    } = getState();
+      const {
+        userLogin: { userInfo },
+      } = getState()
 
-    order.orderItems.map((orderItem) => (orderItem._id==orderItemId? (orderItem.isReturned.lenderConfirmation=true): orderItem))
+      order.orderItems.map((orderItem) =>
+        orderItem._id == orderItemId
+          ? (orderItem.isReturned.lenderConfirmation = true)
+          : orderItem
+      )
 
-    var dataInput = JSON.stringify({
-      "orderItems": order.orderItems
-    });
-    
-    var config = {
-      method: 'put',
-      url: `/api/orders/${order._id}`,
-      headers: { 
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-      data : dataInput
-    };
-    const { data } = axios(config)
-    
-    dispatch({ type: IS_BORROWED_BORROWER_SUCCESS, payload: data });
-  } catch (error) {
-    dispatch({
-      type: IS_BORROWED_BORROWER_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
-    });
+      var dataInput = JSON.stringify({
+        orderItems: order.orderItems,
+      })
+
+      var config = {
+        method: 'put',
+        url: `/api/orders/${order._id}`,
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+        data: dataInput,
+      }
+      const { data } = axios(config)
+
+      dispatch({ type: IS_BORROWED_BORROWER_SUCCESS, payload: data })
+    } catch (error) {
+      dispatch({
+        type: IS_BORROWED_BORROWER_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      })
+    }
   }
-};
