@@ -1,13 +1,9 @@
 import asyncHandler from 'express-async-handler'
 import Item from '../models/itemModel.js'
-import User from '../models/userModel.js'
-import mongoose from 'mongoose'
-const { ObjectId } = mongoose.Types
 
-// @desc fetch all rental Items in batches of 5
+// @desc Fetch all items
 // @route GET /api/items
 // @access Public
-
 const getItems = asyncHandler(async (req, res) => {
   const pageSize = 5
   const page = Number(req.query.pageNumber) || 1
@@ -29,10 +25,9 @@ const getItems = asyncHandler(async (req, res) => {
   res.json({ items, page, pages: Math.ceil(count / pageSize) })
 })
 
-// @desc fetch rental item by id
+// @desc Fetch single item
 // @route GET /api/items/:id
 // @access Public
-
 const getItemsById = asyncHandler(async (req, res) => {
   const item = await Item.findById(req.params.id)
 
@@ -44,10 +39,9 @@ const getItemsById = asyncHandler(async (req, res) => {
   }
 })
 
-// @desc delete item by itemId
+// @desc Delete an item
 // @route DELETE /api/items/:id
 // @access Private
-
 const deleteItemsById = asyncHandler(async (req, res) => {
   const item = await Item.findById(req.params.id)
 
@@ -60,10 +54,9 @@ const deleteItemsById = asyncHandler(async (req, res) => {
   }
 })
 
-// @desc add rental item by User
+// @desc Add an item
 // @route POST /api/items/create
 // @access Private
-
 const addItem = asyncHandler(async (req, res) => {
   const {
     owner,
@@ -76,11 +69,9 @@ const addItem = asyncHandler(async (req, res) => {
     endDate,
   } = req.body
 
-  // const image = "/images/test_image.jpg";
   const image = req.file.path.replace('frontend/public', '')
 
   //item doesnt have to be unique
-
   const item = await Item.create({
     owner,
     name,
@@ -113,10 +104,9 @@ const addItem = asyncHandler(async (req, res) => {
   }
 })
 
-// @desc update an Item by the item Id
+// @desc Update an item
 // @route PUT /api/items/:id
 // @access Private/Admin
-
 const updateItem = asyncHandler(async (req, res) => {
   const {
     _id,
@@ -130,9 +120,8 @@ const updateItem = asyncHandler(async (req, res) => {
     endDate,
     isOrderPlaced,
     isBorrowed,
-    isReturned
-
-  } = req.body;
+    isReturned,
+  } = req.body
 
   const item = await Item.findById(req.params.id)
 
@@ -154,52 +143,12 @@ const updateItem = asyncHandler(async (req, res) => {
       },
     },
     { new: true }
-  );
-
-  //   const updatedItem = await item.save()
-  //   res.json({
-  //     name: updateItem.name,
-  //     brand: updateItem.brand,
-  //     category: updateItem.category,
-  //     description: updateItem.description,
-  //     pricePerDay: updateItem.pricePerDay,
-  //     isOrderPlaced: updateItem.isOrderPlaced
-  //   })
-  // } else {
-  //   res.status(404)
-  //   throw new Error('Item not found')
-  // }
-
-  // const renterObjectId = new mongoose.Types.ObjectId(renter)
-
-  // const updatedItem = await Item.findOneAndUpdate(
-  //   { _id: req.params.id },
-  //   {
-  //     $set: {
-  //       renter: renterObjectId,
-  //       name: name,
-  //       brand: brand,
-  //       category: category,
-  //       description: description,
-  //       pricePerDay: pricePerDay,
-  //       isOrderPlaced: isOrderPlaced,
-  //     },
-  //   },
-  //   { new: true }
-  // )
-
-  // if (updatedItem) {
-  //   res.json(updatedItem)
-  // } else {
-  //   res.status(404)
-  //   throw new Error('Item not found')
-  // }
+  )
 })
 
 // @desc fetch all AVAILABLE rental Items isOrderPlaced == false in batches of 5
 // @route GET /api/items/available
 // @access Public
-
 const getItemsAvailable = asyncHandler(async (req, res) => {
   const pageSize = 5
   const page = Number(req.query.pageNumber) || 1
@@ -234,7 +183,6 @@ const getItemsAvailable = asyncHandler(async (req, res) => {
 // @desc fetch all items by user ID
 // @route GET /api/items/:ownerId
 // @access Private
-
 const getItemsByOwnerId = asyncHandler(async (req, res) => {
   const ownerId = req.params.ownerId
   const items = await Item.find({ owner: ownerId })
@@ -254,7 +202,6 @@ const getItemsByOwnerId = asyncHandler(async (req, res) => {
 // @desc fetch all items by user ID
 // @route GET /api/items/:renterId
 // @access Private
-
 const getItemsByRenterId = asyncHandler(async (req, res) => {
   const renterId = req.params.renterId
   const items = await Item.find({ renter: renterId })
@@ -270,7 +217,6 @@ const getItemsByRenterId = asyncHandler(async (req, res) => {
 // @desc Delete an item
 // @route DELETE /api/items/:id
 // @access Private/Admin
-
 const deleteItem = asyncHandler(async (req, res) => {
   const item = await Item.findById(req.params.id)
 
@@ -282,7 +228,6 @@ const deleteItem = asyncHandler(async (req, res) => {
     throw new Error('Item not found')
   }
 })
-
 
 export {
   getItems,
