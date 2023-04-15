@@ -1,13 +1,9 @@
 import asyncHandler from 'express-async-handler'
 import Item from '../models/itemModel.js'
-import User from '../models/userModel.js'
-import mongoose from 'mongoose'
-const { ObjectId } = mongoose.Types
 
-// @desc fetch all rental Items in batches of 5
+// @desc Fetch all items
 // @route GET /api/items
 // @access Public
-
 const getItems = asyncHandler(async (req, res) => {
   const pageSize = 5
   const page = Number(req.query.pageNumber) || 1
@@ -29,10 +25,9 @@ const getItems = asyncHandler(async (req, res) => {
   res.json({ items, page, pages: Math.ceil(count / pageSize) })
 })
 
-// @desc fetch rental item by id
+// @desc Fetch single item
 // @route GET /api/items/:id
 // @access Public
-
 const getItemsById = asyncHandler(async (req, res) => {
   const item = await Item.findById(req.params.id)
 
@@ -44,10 +39,9 @@ const getItemsById = asyncHandler(async (req, res) => {
   }
 })
 
-// @desc delete item by itemId
+// @desc Delete an item
 // @route DELETE /api/items/:id
 // @access Private
-
 const deleteItemsById = asyncHandler(async (req, res) => {
   const item = await Item.findById(req.params.id)
 
@@ -60,10 +54,9 @@ const deleteItemsById = asyncHandler(async (req, res) => {
   }
 })
 
-// @desc add rental item by User
+// @desc Add an item
 // @route POST /api/items/create
 // @access Private
-
 const addItem = asyncHandler(async (req, res) => {
   const {
     owner,
@@ -80,7 +73,6 @@ const addItem = asyncHandler(async (req, res) => {
   const image = req.file.path.replace("frontend\\public\\images\\" , '/images/')
 
   //item doesnt have to be unique
-
   const item = await Item.create({
     owner,
     name,
@@ -113,10 +105,9 @@ const addItem = asyncHandler(async (req, res) => {
   }
 })
 
-// @desc update an Item by the item Id
+// @desc Update an item
 // @route PUT /api/items/:id
 // @access Private/Admin
-
 const updateItem = asyncHandler(async (req, res) => {
   // const {
   //   _id,
@@ -145,11 +136,12 @@ const updateItem = asyncHandler(async (req, res) => {
     pricePerDay,
     startDate,
     endDate,
+    isOrderPlaced,
+    isBorrowed,
+    isReturned,
   } = req.body
-  console.log(name)
 
-  // const image = "/images/test_image.jpg";
-  // const image = req.file.path.replace('frontend/public', '')
+  const item = await Item.findById(req.params.id)
 
   const updatedItem = await Item.findOneAndUpdate(
     { _id: req.params.id },
@@ -210,7 +202,6 @@ const updateItem = asyncHandler(async (req, res) => {
 // @desc fetch all AVAILABLE rental Items isOrderPlaced == false in batches of 5
 // @route GET /api/items/available
 // @access Public
-
 const getItemsAvailable = asyncHandler(async (req, res) => {
   const pageSize = 5
   const page = Number(req.query.pageNumber) || 1
@@ -245,7 +236,6 @@ const getItemsAvailable = asyncHandler(async (req, res) => {
 // @desc fetch all items by user ID
 // @route GET /api/items/:ownerId
 // @access Private
-
 const getItemsByOwnerId = asyncHandler(async (req, res) => {
   const ownerId = req.params.ownerId
   const items = await Item.find({ owner: ownerId })
@@ -266,7 +256,6 @@ const getItemsByOwnerId = asyncHandler(async (req, res) => {
 // @desc fetch all items by user ID
 // @route GET /api/items/:renterId
 // @access Private
-
 const getItemsByRenterId = asyncHandler(async (req, res) => {
   const renterId = req.params.renterId
   const items = await Item.find({ renter: renterId })
@@ -282,7 +271,6 @@ const getItemsByRenterId = asyncHandler(async (req, res) => {
 // @desc Delete an item
 // @route DELETE /api/items/:id
 // @access Private/Admin
-
 const deleteItem = asyncHandler(async (req, res) => {
   const item = await Item.findById(req.params.id)
 
@@ -295,6 +283,47 @@ const deleteItem = asyncHandler(async (req, res) => {
   }
 })
 
+// @desc Create new review
+// @route POST /api/items/:id/reviews
+// @access Private
+const createItemReview = asyncHandler(async (req, res) => {
+  const { rating, comment } = req.body
+  console.log(rating, comment)
+
+  const item = await Item.findById(req.params.id)
+
+  if (item) {
+    const alreadyReviewed = item.reviews.find(
+      (r) => r.user.toString() === req.user._id.toString()
+    )
+
+    if (alreadyReviewed) {
+      res.status(400)
+      throw new Error('Item already reviewed')
+    }
+
+    const review = {
+      name: req.user.name,
+      rating: Number(rating),
+      comment,
+      user: req.user._id,
+    }
+
+    item.reviews.push(review)
+
+    item.numReviews = item.reviews.length
+
+    item.rating =
+      item.reviews.reduce((acc, item) => item.rating + acc, 0) /
+      item.reviews.length
+
+    await item.save()
+    res.status(201).json({ message: 'Review added' })
+  } else {
+    res.status(404)
+    throw new Error('Item not found')
+  }
+})
 
 export {
   getItems,
@@ -306,4 +335,5 @@ export {
   getItemsByOwnerId,
   getItemsByRenterId,
   deleteItem,
+  createItemReview,
 }

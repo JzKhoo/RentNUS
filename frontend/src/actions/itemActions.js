@@ -15,26 +15,29 @@ import {
   ITEM_DELETE_REQUEST,
   ITEM_DELETE_SUCCESS,
   ITEM_DELETE_FAIL,
-  ITEM_DELETE_RESET,
   ITEM_UPDATE_REQUEST,
   ITEM_UPDATE_SUCCESS,
-  ITEM_UPDATE_FAIL
+  ITEM_UPDATE_FAIL,
+  ITEM_CREATE_REVIEW_REQUEST,
+  ITEM_CREATE_REVIEW_SUCCESS,
+  ITEM_CREATE_REVIEW_FAIL,
 } from '../constants/itemConstants'
+import { logout } from './userActions'
 
 export const listItemsAvailable =
-  (keyword = "", pageNumber = "") =>
+  (keyword = '', pageNumber = '') =>
   async (dispatch) => {
     try {
-      dispatch({ type: ITEM_LIST_REQUEST });
+      dispatch({ type: ITEM_LIST_REQUEST })
 
       const { data } = await axios.get(
         `/api/items/available?keyword=${keyword}&pageNumber=${pageNumber}`
-      );
+      )
 
       dispatch({
         type: ITEM_LIST_SUCCESS,
         payload: data,
-      });
+      })
     } catch (error) {
       dispatch({
         type: ITEM_LIST_FAIL,
@@ -42,12 +45,12 @@ export const listItemsAvailable =
           error.response && error.response.data.message
             ? error.response.data.message
             : error.message,
-      });
+      })
     }
-  };
+  }
 
-  export const listItems =
-  (keyword = "", pageNumber = "") =>
+export const listItems =
+  (keyword = '', pageNumber = '') =>
   async (dispatch) => {
     try {
       dispatch({ type: ITEM_LIST_REQUEST })
@@ -127,7 +130,6 @@ export const addItem = (formData) => async (dispatch, getState) => {
 
     const config = {
       headers: {
-        'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${userInfo.token}`,
       },
     }
@@ -135,7 +137,6 @@ export const addItem = (formData) => async (dispatch, getState) => {
     const { data } = await axios.post('/api/items/create', formData, config)
 
     dispatch({ type: ITEM_ADD_SUCCESS, payload: data })
-    localStorage.setItem('itemInfo', JSON.stringify(data))
   } catch (error) {
     dispatch({
       type: ITEM_ADD_FAIL,
@@ -192,8 +193,8 @@ export const deleteItem = (id) => async (dispatch, getState) => {
 
 export const updateItem = (itemId, formData) => async (dispatch, getState) => {
   try {
-    dispatch({ 
-      type: ITEM_UPDATE_REQUEST
+    dispatch({
+      type: ITEM_UPDATE_REQUEST,
     })
 
     const {
@@ -234,7 +235,7 @@ export const updateItem = (itemId, formData) => async (dispatch, getState) => {
     const { data } = axios(config)
 
     dispatch({ type: ITEM_UPDATE_SUCCESS })
-    
+
     dispatch({ type: ITEM_DETAILS_SUCCESS, payload: data })
   } catch (error) {
     dispatch({
@@ -246,3 +247,55 @@ export const updateItem = (itemId, formData) => async (dispatch, getState) => {
     })
   }
 }
+
+export const createItemReview =
+  (itemId, rating, comment) => async (dispatch, getState) => {
+    try {
+      dispatch({
+        type: ITEM_CREATE_REVIEW_REQUEST,
+      })
+
+      const {
+        userLogin: { userInfo },
+      } = getState()
+
+      // const config = {
+      //   headers: {
+      //     'Content-Type': 'application.json',
+      //     Authorization: `Bearer ${userInfo.token}`,
+      //   },
+      // }
+
+      // await axios.post(`/api/items/${itemId}/reviews`, review, config)
+
+      var dataInput = JSON.stringify({
+        rating: rating,
+        comment: comment,
+      })
+
+      var config = {
+        method: 'post',
+        url: `/api/items/reviews/${itemId}`,
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+        data: dataInput,
+      }
+      await axios(config)
+
+      dispatch({ type: ITEM_CREATE_REVIEW_SUCCESS })
+    } catch (error) {
+      const message =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+      if (message === 'Not authorized, token failed') {
+        dispatch(logout())
+      }
+      dispatch({
+        type: ITEM_CREATE_REVIEW_FAIL,
+        payload: message,
+      })
+    }
+  }

@@ -1,4 +1,20 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose'
+
+const reviewSchema = mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    rating: { type: Number, required: true },
+    comment: { type: String, required: true },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'User',
+    },
+  },
+  {
+    timestamps: true,
+  }
+)
 
 const itemSchema = mongoose.Schema(
   {
@@ -6,13 +22,13 @@ const itemSchema = mongoose.Schema(
     owner: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
-      ref: "User",
+      ref: 'User',
     },
     // required to display -> myItems borrowed
     renter: {
       type: mongoose.Schema.Types.ObjectId,
       required: false,
-      ref: "User",
+      ref: 'User',
     },
     name: {
       type: String,
@@ -34,6 +50,17 @@ const itemSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    reviews: [reviewSchema],
+    rating: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    numReviews: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
     pricePerDay: {
       type: Number,
       required: true,
@@ -52,14 +79,14 @@ const itemSchema = mongoose.Schema(
       type: Boolean,
       required: true,
       default: false,
-    }, 
+    },
     isBorrowed: {
-      borrowerConfirmation: {type: Boolean, required:false, default:false},
-      lenderConfirmation: {type: Boolean, required:false, default:false},
+      borrowerConfirmation: { type: Boolean, required: false, default: false },
+      lenderConfirmation: { type: Boolean, required: false, default: false },
     },
     isReturned: {
-      borrowerConfirmation: {type: Boolean, required:false, default:false},
-      lenderConfirmation: {type: Boolean, required:false, default:false},
+      borrowerConfirmation: { type: Boolean, required: false, default: false },
+      lenderConfirmation: { type: Boolean, required: false, default: false },
     },
     returnedAt: {
       type: Date,
@@ -68,8 +95,8 @@ const itemSchema = mongoose.Schema(
   {
     timestamps: true,
   }
-);
+)
 
-const Item = mongoose.model("Item", itemSchema);
+const Item = mongoose.model('Item', itemSchema)
 
-export default Item;
+export default Item

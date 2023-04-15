@@ -9,6 +9,8 @@ const items = [
     pricePerDay: 89.99,
     startDate: new Date("2023-04-01"),
     endDate: new Date("2023-06-01"),
+    rating: 0,
+    numReviews: 0,
   },
   {
     name: "RENT: iPhone 11 Pro 256GB Memory",
@@ -20,6 +22,8 @@ const items = [
     pricePerDay: 69.69,
     startDate: new Date("2023-04-01"),
     endDate: new Date("2023-06-01"),
+    rating: 0,
+    numReviews: 0,
   },
   {
     name: "RENT: Cannon EOS 80D DSLR Camera",
@@ -31,6 +35,8 @@ const items = [
     pricePerDay: 12.21,
     startDate: new Date("2023-04-01"),
     endDate: new Date("2023-06-01"),
+    rating: 0,
+    numReviews: 0,
   },
   {
     name: "RENT: Sony Playstation 4 Pro White Version",
@@ -42,6 +48,8 @@ const items = [
     pricePerDay: 13.34,
     startDate: new Date("2023-04-01"),
     endDate: new Date("2023-06-01"),
+    rating: 0,
+    numReviews: 0,
   },
   {
     name: "RENT: Logitech G-Series Gaming Mouse",
@@ -53,6 +61,8 @@ const items = [
     pricePerDay: 11.11,
     startDate: new Date("2023-04-01"),
     endDate: new Date("2023-06-01"),
+    rating: 0,
+    numReviews: 0,
   },
   {
     name: "RENT: Amazon Echo Dot 3rd Generation",
@@ -64,6 +74,8 @@ const items = [
     pricePerDay: 55.66,
     startDate: new Date("2023-04-01"),
     endDate: new Date("2023-06-01"),
+    rating: 0,
+    numReviews: 0,
   },
 ];
 

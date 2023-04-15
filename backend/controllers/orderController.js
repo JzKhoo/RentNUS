@@ -2,7 +2,6 @@ import asyncHandler from 'express-async-handler'
 import Order from '../models/orderModel.js'
 import Item from '../models/itemModel.js'
 import User from '../models/userModel.js'
-import mongoose from 'mongoose'
 
 // @desc    Create new order
 // @route   POST /api/orders
@@ -56,10 +55,10 @@ const addOrderItems = asyncHandler(async (req, res) => {
 // @access  Private
 const getOrderById = asyncHandler(async (req, res) => {
   const order = await Order.findById(req.params.id)
-  // .populate(
-  //   "user",
-  //   "name email" // get name and email of a user tagged to order
-  // );
+  .populate(
+    "user",
+    "name email" // get name and email of a user tagged to order
+  );
 
   if (order) {
     res.json(order)
@@ -112,26 +111,6 @@ const updateOrder = asyncHandler(async (req, res) => {
     res.status(404)
     throw new Error('Order not found')
   }
-  // const order = await Order.findById(req.params.orderId);
-  // console.log("order: "+ order.orderItems);
-
-  // const updatedOrder = await Order.updateOne(
-  //   { _id: req.params.orderId},
-  //   {
-  //     $set: {
-  //       "orderItems.$.isBorrowed": isBorrowed,
-  //     },
-  //   },
-  // );
-
-  // console.log("Updated order: "+ updatedOrder.orderItems);
-
-  // if (updatedOrder) {
-  //   res.json(updatedOrder);
-  // } else {
-  //   res.status(404);
-  //   throw new Error("Item not found");
-  // }
 })
 
 // @desc    Update order to paid
@@ -182,7 +161,6 @@ const updateOrderToDelivered = asyncHandler(async (req, res) => {
 // @desc    Get logged in user orders
 // @route   GET /api/orders/myorders
 // @access  Private
-
 const getMyOrders = asyncHandler(async (req, res) => {
   const orders = await Order.find({ user: req.user._id })
   res.json(orders)
@@ -191,7 +169,6 @@ const getMyOrders = asyncHandler(async (req, res) => {
 // @desc    Get logged in user orders
 // @route   GET /api/orders/myorders
 // @access  Private
-
 const getMyItemOrders = asyncHandler(async (req, res) => {
   const orders = await Order.find({ 'orderItems.owner': req.params.userId })
   res.json(orders)

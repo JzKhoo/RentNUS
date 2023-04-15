@@ -26,7 +26,6 @@ import {
 } from '../constants/orderConstants'
 
 const OrderScreen = ({}) => {
-
   const { id } = useParams()
   const orderId = id
 
@@ -126,8 +125,6 @@ const OrderScreen = ({}) => {
     dispatch(payOrder(orderId, paymentResult))
   }
 
-  
-
   //   const deliverHandler = () => {
   //     dispatch(deliverOrder(order))
   //   }
@@ -142,12 +139,8 @@ const OrderScreen = ({}) => {
       <Row>
         <Col md={8}>
           <ListGroup variant='flush'>
-            <p>
-              Shipping
-            </p>
-            <ListGroupItem>
-              Name: {order.user.name}
-            </ListGroupItem>
+            <p>Shipping</p>
+            <ListGroupItem>Name: {order.user.name}</ListGroupItem>
             <ListGroupItem>
               <strong>Email: </strong>{' '}
               <a href={`mailto:${order.user.email}`}>{order.user.email}</a>

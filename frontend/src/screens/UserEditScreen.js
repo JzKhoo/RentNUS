@@ -12,7 +12,7 @@ const UserEditScreen = ({ match, history }) => {
   const { id } = useParams()
   const userId = id
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -24,7 +24,11 @@ const UserEditScreen = ({ match, history }) => {
   const { loading, error, user } = userDetails
 
   const userUpdate = useSelector((state) => state.userUpdate)
-  const { loading: loadingUpdate, error: errorUpdate, success:successUpdate } = userUpdate
+  const {
+    loading: loadingUpdate,
+    error: errorUpdate,
+    success: successUpdate,
+  } = userUpdate
 
   useEffect(() => {
     if (successUpdate) {
@@ -43,7 +47,7 @@ const UserEditScreen = ({ match, history }) => {
 
   const submitHandler = (e) => {
     e.preventDefault()
-    dispatch(updateUser({_id: userId, name, email, isAdmin }))
+    dispatch(updateUser({ _id: userId, name, email, isAdmin }))
   }
 
   return (
