@@ -22,6 +22,7 @@ import UserEditScreen from './screens/UserEditScreen'
 import MyOrdersScreen from './screens/MyOrdersScreen'
 import ItemListScreen from './screens/ItemListScreen'
 import ItemEditScreen from './screens/ItemEditScreen'
+import UpdateItemScreen from './screens/UpdateItemScreen'
 import OrderListScreen from './screens/OrderListScreen'
 
 function App() {
@@ -80,6 +81,9 @@ function App() {
           </Routes>
           <Routes>
             <Route path='/myItems' element={<MyItemsScreen />} />
+          </Routes>
+          <Routes>
+            <Route path='/updateitem/:itemId' element={<UpdateItemScreen />} />
           </Routes>
           <Routes>
             <Route path='/page/:pageNumber' element={<HomeScreen />} exact />
