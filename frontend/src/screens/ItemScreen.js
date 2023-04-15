@@ -75,6 +75,12 @@ const ItemScreen = () => {
                   <ListGroupItem>Price/Day: $ {item.pricePerDay}</ListGroupItem>
                   <ListGroupItem>Description: {item.description}</ListGroupItem>
                   <ListGroupItem>
+                    Brand: {item.brand}
+                  </ListGroupItem>
+                  <ListGroupItem>
+                    Category: {item.category}
+                  </ListGroupItem>
+                  <ListGroupItem>
                     <h5>Select rental dates:</h5>
                     <DatePicker
                       selected={rentalStartDate}
