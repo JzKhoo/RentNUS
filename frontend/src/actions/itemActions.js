@@ -214,7 +214,7 @@ export const updateItem = (item) => async (dispatch, getState) => {
 }
 
 export const createItemReview =
-  (itemId, review) => async (dispatch, getState) => {
+  (itemId, rating, comment) => async (dispatch, getState) => {
     try {
       dispatch({
         type: ITEM_CREATE_REVIEW_REQUEST,
@@ -224,14 +224,30 @@ export const createItemReview =
         userLogin: { userInfo },
       } = getState()
 
-      const config = {
+      // const config = {
+      //   headers: {
+      //     'Content-Type': 'application.json',
+      //     Authorization: `Bearer ${userInfo.token}`,
+      //   },
+      // }
+
+      // await axios.post(`/api/items/${itemId}/reviews`, review, config)
+
+      var dataInput = JSON.stringify({
+        rating: rating,
+        comment: comment
+      })
+
+      var config = {
+        method: 'put',
+        url: `/api/items/${itemId}/reviews`,
         headers: {
-          'Content-Type': 'application.json',
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${userInfo.token}`,
         },
+        data: dataInput,
       }
-
-      await axios.post(`/api/items/${itemId}/reviews`, review, config)
+      axios(config)
 
       dispatch({ type: ITEM_CREATE_REVIEW_SUCCESS })
     } catch (error) {

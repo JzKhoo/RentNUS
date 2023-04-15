@@ -234,6 +234,7 @@ const deleteItem = asyncHandler(async (req, res) => {
 // @access Private
 const createItemReview = asyncHandler(async (req, res) => {
   const { rating, comment } = req.body
+  console.log(rating, comment)
 
   const item = await Item.findById(req.params.id)
 

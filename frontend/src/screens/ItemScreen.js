@@ -63,7 +63,7 @@ const ItemScreen = ({ history, match }) => {
   const submitHandler = (e) => {
     e.preventDefault()
     dispatch(
-      createItemReview(id, {rating:rating, comment:comment}
+      createItemReview(id, rating, comment
       )
     )
   }
