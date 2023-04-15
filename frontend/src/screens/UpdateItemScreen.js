@@ -10,6 +10,8 @@ import { listItemDetails, updateItem } from '../actions/itemActions'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useDropzone } from "react-dropzone";
+import { ITEM_UPDATE_RESET } from '../constants/itemConstants'
+
 
 const MyDropzone = ({ onFileSelect }) => {
     const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
@@ -87,13 +89,8 @@ const UpdateItemScreen = () => {
     const { loading, error, item } = itemDetails
     console.log(item)
 
-    // const itemList = useSelector((state) => state.itemMyList);
-    // const { loading, error, items } = itemList;
-
-    // var itemToUpdateVar = itemToUpdate;
-    // if (items) {
-    //     items.map((item)=>(item._id == itemToUpdate._id?))
-    // }
+    const itemUpdate = useSelector((state) => state.itemUpdate)
+    const { loading:loadingUpdate, error:errorUpdate, success:successUpdate } = itemUpdate
 
     const userLogin = useSelector((state) => state.userLogin);
     const { userInfo } = userLogin;
@@ -105,55 +102,40 @@ const UpdateItemScreen = () => {
         if (!userInfo) {
         navigate("/login");
         // if not logged in 
-        } else {
-        if (item._id !== itemId) {
+        }
+        if(successUpdate) {
+          dispatch({ type: ITEM_UPDATE_RESET})
+          navigate('/myItems')
+        }else if (!item || !item.name) {
             dispatch(listItemDetails(itemId))
-          } else {
-            setName(item.name);
-            setBrand(item.brand);
-            setCategory(item.category);
-            setDescription(item.description);
-            setPricePerDay(item.pricePerDay);
-            setStartDate(item.startDate);
-            setEndDate(item.endDate);
-            setSelectedFile(item.selectedFile)
-        }
-        }
-    }, [dispatch, navigate, userInfo]);
+        } else {
+          setName(item.name);
+          setBrand(item.brand);
+          setCategory(item.category);
+          setDescription(item.description);
+          setPricePerDay(item.pricePerDay);
+          // setStartDate(item.startDate);
+          // setEndDate(item.endDate);
+          setSelectedFile(item.selectedFile)
+      }
+    }, [dispatch, navigate, userInfo, item, successUpdate]);
 
     const submitHandler = (e) => {
         e.preventDefault();
-        // const updatedItem = {
-        //     name: name,
-        //     brand = brand;
-        //     catgeory = category;
-        //     description = description;
-        //     pricePerDay = pricePerDay;
-        // item.startDate = startDate;
-        // item.endDate = endDate;
-        // }
-        // const formData = new FormData();
-        // formData.append("name", name);
-        // formData.append("brand", brand);
-        // formData.append("category", category);
-        // formData.append("description", description);
-        // formData.append("pricePerDay", pricePerDay);
-        // formData.append("startDate", startDate);
-        // formData.append("endDate", endDate);
-        item.name = name;
-        item.brand = brand;
-        item.catgeory = category;
-        item.description = description;
-        item.pricePerDay = pricePerDay;
-        item.startDate = startDate;
-        item.endDate = endDate;
-        dispatch(updateItem(itemId, item));
-        console.log("item dispatched");
-        setShowMessage(true);
-        setTimeout(() => {
-          setShowMessage(false);
-          navigate("/myItems");
-        }, 3000);
+        const formData = new FormData();
+        formData.append("name", name);
+        formData.append("brand", brand);
+        formData.append("category", category);
+        formData.append("description", description);
+        formData.append("pricePerDay", pricePerDay);
+        formData.append("startDate", startDate);
+        formData.append("endDate", endDate);
+        dispatch(updateItem(itemId, formData));
+        // setShowMessage(true);
+        // setTimeout(() => {
+        //   setShowMessage(false);
+        //   navigate("/myItems");
+        // }, 3000);
       };
 
     return (
@@ -161,13 +143,15 @@ const UpdateItemScreen = () => {
       <Link to='/admin/itemlist' className='btn btn-light my-3'>
         Go Back
       </Link>
-      <FormContainer>
-        <h1>Edit {item.name} details</h1>
-        {loading ? (
+      {loadingUpdate && <Loader />}
+      {errorUpdate && <Message variant='danger'>{errorUpdate}</Message>}
+      {loading ? (
           <Loader />
         ) : error ? (
           <Message variant='danger'>{error}</Message>
         ) : (
+      <FormContainer>
+        <h1>Edit item details</h1>
           <Form onSubmit={submitHandler}>
             <Form.Group controlId='name'>
               <Form.Label>Name</Form.Label>
@@ -219,12 +203,29 @@ const UpdateItemScreen = () => {
               ></Form.Control>
             </Form.Group>
 
+            <Form.Group controlId="startDate">
+              <Form.Label>Start Date of Item availability</Form.Label>
+              <br />
+              <DatePicker
+                selected={startDate}
+                onChange={(date) => setStartDate(date)}
+              />
+            </Form.Group>
+
+            <Form.Group controlId="endDate">
+              <Form.Label>End Date of Item availability</Form.Label>
+              <br />
+              <DatePicker
+                selected={endDate}
+                onChange={(date) => setEndDate(date)}
+              />
+            </Form.Group>
+
             <Button type='submit' variant='primary'>
               Update
             </Button>
           </Form>
-        )}
-      </FormContainer>
+      </FormContainer>)}
     </>
     );
 };

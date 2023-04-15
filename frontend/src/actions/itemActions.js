@@ -190,7 +190,7 @@ export const deleteItem = (id) => async (dispatch, getState) => {
   }
 }
 
-export const updateItem = (itemId, item) => async (dispatch, getState) => {
+export const updateItem = (itemId, formData) => async (dispatch, getState) => {
   try {
     dispatch({ 
       type: ITEM_UPDATE_REQUEST
@@ -210,17 +210,17 @@ export const updateItem = (itemId, item) => async (dispatch, getState) => {
     // const { data } = await axios.put(`/api/items/${itemId}`, formData, config)
 
     var dataInput = JSON.stringify({
-      "name": item.name,
-      "brand": item.brand,
-      "category": item.category,
-      "description": item.description,
-      "pricePerDay": item.pricePerDay,
-      "startDate": item.startDate,
-      "endDate": item.endDate
+      "name": formData.get("name"),
+      "brand": formData.get("brand"),
+      "category": formData.get("category"),
+      "description": formData.get("description"),
+      "pricePerDay": formData.get("pricePerDay"),
+      "startDate": formData.get("startDate"),
+      "endDate": formData.get("endDate")
 
     });
 
-    console.log("form data:" + item.name)
+    console.log("form data:" + formData.get("name"))
     
     var config = {
       method: 'put',

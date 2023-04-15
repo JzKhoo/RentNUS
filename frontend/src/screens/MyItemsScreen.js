@@ -193,6 +193,8 @@ const MyItemsScreen = () => {
                 <th>BRAND</th>
                 <th>CATEGORY</th>
                 <th>DESCRIPTION</th>
+                <th>START DATE AVAILABILITY</th>
+                <th>END DATE AVAILABILTY</th>
                 <th>PRICE</th>
                 <th>DELETE</th>
                 <th>UPDATE</th>
@@ -210,6 +212,8 @@ const MyItemsScreen = () => {
                   <td>{item.brand}</td>
                   <td>{item.category}</td>
                   <td>{item.description}</td>
+                  <td>{item.startDate.replace("T16:00:00.000Z", "")}</td>
+                  <td>{item.endDate.replace("T16:00:00.000Z", "")}</td>
                   <td>{item.pricePerDay}</td>
                   <td>{
                       !item.isOrderPlaced &&
