@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Form, Button, Col } from 'react-bootstrap'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import FormContainer from '../components/FormContainer'
 import CheckoutSteps from '../components/CheckoutSteps'
@@ -23,7 +23,7 @@ const PaymentScreen = ({ history }) => {
   const submitHandler = (e) => {
     e.preventDefault()
     dispatch(savePaymentMethod(paymentMethod))
-    navigate('/placeorder') 
+    navigate('/placeorder')
   }
 
   return (

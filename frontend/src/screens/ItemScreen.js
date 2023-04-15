@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState } from 'react'
+import { Link, useParams, useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 import {
   Row,
   Col,
@@ -10,63 +10,63 @@ import {
   Button,
   ListGroupItem,
   Form,
-} from "react-bootstrap";
-import Message from "../components/Message";
-import Loader from "../components/Loader";
-import { listItemDetails } from "../actions/itemActions";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import moment from "moment";
+} from 'react-bootstrap'
+import Message from '../components/Message'
+import Loader from '../components/Loader'
+import { listItemDetails } from '../actions/itemActions'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
+import moment from 'moment'
 
 const ItemScreen = () => {
-  const [qty, setQty] = useState(1);
+  const [qty, setQty] = useState(1)
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
-  const itemDetails = useSelector((state) => state.itemDetails);
-  const { loading, error, item } = itemDetails;
-  const navigate = useNavigate();
-  const { id } = useParams();
+  const itemDetails = useSelector((state) => state.itemDetails)
+  const { loading, error, item } = itemDetails
+  const navigate = useNavigate()
+  const { id } = useParams()
 
   //const for date selection
-  const [rentalStartDate, setRentalStartDate] = useState(null);
-  const [rentalEndDate, setRentalEndDate] = useState(null);
-  const [totalCost, setTotalCost] = useState(0);
+  const [rentalStartDate, setRentalStartDate] = useState(null)
+  const [rentalEndDate, setRentalEndDate] = useState(null)
+  const [totalCost, setTotalCost] = useState(0)
 
   useEffect(() => {
-    dispatch(listItemDetails(id));
-  }, [dispatch, id]);
+    dispatch(listItemDetails(id))
+  }, [dispatch, id])
 
   const addToCartHandler = () => {
-    navigate(`/cart/${id}?totalCost=${totalCost}`);
-  };
+    navigate(`/cart/${id}?totalCost=${totalCost}`)
+  }
 
   const calculateTotalCost = (start, end, pricePerDay) => {
     if (start && end) {
-      const duration = moment.duration(end.diff(start));
-      const days = duration.asDays() + 1;
-      return days * pricePerDay;
+      const duration = moment.duration(end.diff(start))
+      const days = duration.asDays() + 1
+      return days * pricePerDay
     }
-    return 0;
-  };
+    return 0
+  }
 
   const viewOwner = () => {
-    navigate(`/displayuserprofile/${item.owner}`);
-  };
+    navigate(`/displayuserprofile/${item.owner}`)
+  }
 
   return (
     <>
-      <Link className="btn btn-light my-3" to="/">
+      <Link className='btn btn-light my-3' to='/'>
         Go Back
       </Link>
       {loading ? (
         <Loader />
       ) : error ? (
-        <Message variant="danger">{error}</Message>
+        <Message variant='danger'>{error}</Message>
       ) : (
         <Row>
           <Col md={3}>
-            <ListGroup variant="flush">
+            <ListGroup variant='flush'>
               {item ? (
                 <>
                   <ListGroupItem>
@@ -86,13 +86,13 @@ const ItemScreen = () => {
                         new Date(Math.max(new Date(item.startDate), new Date()))
                       }
                       maxDate={new Date(item.endDate)}
-                      dateFormat="MMM d"
+                      dateFormat='MMM d'
                     />
-                    {" - "}
+                    {' - '}
                     <DatePicker
                       selected={rentalEndDate}
                       onChange={(date) => {
-                        setRentalEndDate(date);
+                        setRentalEndDate(date)
                         setTotalCost(
                           parseFloat(
                             calculateTotalCost(
@@ -101,14 +101,14 @@ const ItemScreen = () => {
                               item.pricePerDay
                             ).toFixed(2)
                           )
-                        );
+                        )
                       }}
                       selectsEnd
                       rentalStartDate={rentalStartDate}
                       rentalEndDate={rentalEndDate}
                       minDate={rentalStartDate || new Date(item.startDate)}
                       maxDate={new Date(item.endDate)}
-                      dateFormat="MMM d"
+                      dateFormat='MMM d'
                     />
                   </ListGroupItem>
                   <ListGroupItem>
@@ -128,37 +128,37 @@ const ItemScreen = () => {
                     // </Link>
                     <Button
                       onClick={viewOwner}
-                      className="btn btn-light my-3"
-                      type="button"
-                      style={{ fontSize: "1.5rem", padding: "1rem" }}
+                      className='btn btn-light my-3'
+                      type='button'
+                      style={{ fontSize: '1.5rem', padding: '1rem' }}
                     >
                       View Owner
                     </Button>
                   )}
                 </>
               ) : (
-                <Message variant="danger">Item not found</Message>
+                <Message variant='danger'>Item not found</Message>
               )}
             </ListGroup>
           </Col>
           <Col>
             {item && (
               <Card>
-                <ListGroup variant="flush">
-                  <ListGroupItem className="d-flex justify-content-center">
+                <ListGroup variant='flush'>
+                  <ListGroupItem className='d-flex justify-content-center'>
                     <Image
                       src={item.image}
                       alt={item.name}
-                      className="my-3"
-                      style={{ width: "100%", maxWidth: "500px" }}
+                      className='my-3'
+                      style={{ width: '100%', maxWidth: '500px' }}
                     />
                   </ListGroupItem>
                   <ListGroupItem>
                     <Button
                       onClick={addToCartHandler}
-                      className="btn-block btn-primary"
-                      type="button"
-                      style={{ fontSize: "1.5rem", padding: "1rem" }}
+                      className='btn-block btn-primary'
+                      type='button'
+                      style={{ fontSize: '1.5rem', padding: '1rem' }}
                       disabled={!rentalStartDate || !rentalEndDate}
                     >
                       Add To Cart
@@ -171,7 +171,7 @@ const ItemScreen = () => {
         </Row>
       )}
     </>
-  );
-};
+  )
+}
 
-export default ItemScreen;
+export default ItemScreen

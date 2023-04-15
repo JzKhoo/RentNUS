@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import Footer from './components/Footer'
 import { Container } from 'react-bootstrap'
 import HomeScreen from './screens/HomeScreen'
-//import ProductScreen from "./screens/ProductScreen";
 import ItemScreen from './screens/ItemScreen'
 import CartScreen from './screens/CartScreen'
 import LoginScreen from './screens/LoginScreen'
@@ -36,9 +35,6 @@ function App() {
           <Routes>
             <Route path='/addItem' element={<AddItemScreen />} />
           </Routes>
-          {/* <Routes>
-            <Route path="/displayuserprofile" element={<DisplayUserProfileScreen/>} />
-          </Routes> */}
           <Routes>
             <Route
               path='/displayuserprofile/:owner'
@@ -57,9 +53,6 @@ function App() {
           <Routes>
             <Route path='/order/:id' element={<OrderScreen />} />
           </Routes>
-          {/* <Routes>
-            <Route path="/product/:id" element={<ProductScreen />} />
-          </Routes> */}
           <Routes>
             <Route path='/cart/:id?' element={<CartScreen />} />
           </Routes>
@@ -95,7 +88,11 @@ function App() {
             <Route path='/admin/userlist' element={<UserListScreen />} exact />
           </Routes>
           <Routes>
-            <Route path='/admin/orderlist' element={<OrderListScreen />} exact />
+            <Route
+              path='/admin/orderlist'
+              element={<OrderListScreen />}
+              exact
+            />
           </Routes>
           <Routes>
             <Route
