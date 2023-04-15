@@ -21,6 +21,9 @@ router
   .get(protect, getLoggedInProfile)
   .put(protect, updateUserProfile)
 router
+  .route('/updateprofile')
+  .put(protect, updateUserProfile)
+router
   .route('/:id')
   .delete(protect, admin, deleteUser)
   .get(protect, admin, getUserById)
