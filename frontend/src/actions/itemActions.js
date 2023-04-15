@@ -15,11 +15,14 @@ import {
   ITEM_DELETE_REQUEST,
   ITEM_DELETE_SUCCESS,
   ITEM_DELETE_FAIL,
-  ITEM_DELETE_RESET,
   ITEM_UPDATE_REQUEST,
   ITEM_UPDATE_SUCCESS,
   ITEM_UPDATE_FAIL,
+  ITEM_CREATE_REVIEW_REQUEST,
+  ITEM_CREATE_REVIEW_SUCCESS,
+  ITEM_CREATE_REVIEW_FAIL,
 } from '../constants/itemConstants'
+import { logout } from './userActions'
 
 export const listItemsAvailable =
   (keyword = '', pageNumber = '') =>
@@ -209,3 +212,39 @@ export const updateItem = (item) => async (dispatch, getState) => {
     })
   }
 }
+
+export const createItemReview =
+  (itemId, review) => async (dispatch, getState) => {
+    try {
+      dispatch({
+        type: ITEM_CREATE_REVIEW_REQUEST,
+      })
+
+      const {
+        userLogin: { userInfo },
+      } = getState()
+
+      const config = {
+        headers: {
+          'Content-Type': 'application.json',
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      }
+
+      await axios.post(`/api/items/${itemId}/reviews`, review, config)
+
+      dispatch({ type: ITEM_CREATE_REVIEW_SUCCESS })
+    } catch (error) {
+      const message =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+      if (message === 'Not authorized, token failed') {
+        dispatch(logout())
+      }
+      dispatch({
+        type: ITEM_CREATE_REVIEW_FAIL,
+        payload: message,
+      })
+    }
+  }

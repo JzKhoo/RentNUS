@@ -229,6 +229,47 @@ const deleteItem = asyncHandler(async (req, res) => {
   }
 })
 
+// @desc Create new review
+// @route POST /api/items/:id/reviews
+// @access Private
+const createItemReview = asyncHandler(async (req, res) => {
+  const { rating, comment } = req.body
+
+  const item = await Item.findById(req.params.id)
+
+  if (item) {
+    const alreadyReviewed = item.reviews.find(
+      (r) => r.user.toString() === req.user._id.toString()
+    )
+
+    if (alreadyReviewed) {
+      res.status(400)
+      throw new Error('Item already reviewed')
+    }
+
+    const review = {
+      name: req.user.name,
+      rating: Number(rating),
+      comment,
+      user: req.user._id,
+    }
+
+    item.reviews.push(review)
+
+    item.numReviews = item.reviews.length
+
+    item.rating =
+      item.reviews.reduce((acc, item) => item.rating + acc, 0) /
+      item.reviews.length
+
+    await item.save()
+    res.status(201).json({ message: 'Review added' })
+  } else {
+    res.status(404)
+    throw new Error('Item not found')
+  }
+})
+
 export {
   getItems,
   getItemsById,
@@ -239,4 +280,5 @@ export {
   getItemsByOwnerId,
   getItemsByRenterId,
   deleteItem,
+  createItemReview,
 }
