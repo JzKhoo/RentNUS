@@ -26,11 +26,15 @@ const ItemEditScreen = ({ match, history }) => {
   const { loading, error, item } = itemDetails
 
   const itemUpdate = useSelector((state) => state.itemUpdate)
-  const { loading:loadingUpdate, error:errorUpdate, success:successUpdate } = itemUpdate
+  const {
+    loading: loadingUpdate,
+    error: errorUpdate,
+    success: successUpdate,
+  } = itemUpdate
 
   useEffect(() => {
-    if(successUpdate) {
-      dispatch({ type: ITEM_UPDATE_RESET})
+    if (successUpdate) {
+      dispatch({ type: ITEM_UPDATE_RESET })
       navigate('/admin/itemlist')
     } else {
       if (!item.name || item._id !== itemId) {
@@ -43,19 +47,20 @@ const ItemEditScreen = ({ match, history }) => {
         setPricePerDay(item.pricePerDay)
       }
     }
-    
   }, [dispatch, history, itemId, item, successUpdate])
 
   const submitHandler = (e) => {
     e.preventDefault()
-    dispatch(updateItem({
-      _id: itemId,
-      name,
-      brand,
-      category,
-      description,
-      pricePerDay
-    }))
+    dispatch(
+      updateItem({
+        _id: itemId,
+        name,
+        brand,
+        category,
+        description,
+        pricePerDay,
+      })
+    )
   }
 
   return (

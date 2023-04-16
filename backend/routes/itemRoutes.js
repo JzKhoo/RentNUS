@@ -14,7 +14,7 @@ import {
   getItemsByOwnerId,
   getItemsByRenterId,
   deleteItem,
-  createItemReview
+  createItemReview,
 } from '../controllers/itemController.js'
 
 const storage = multer.diskStorage({
@@ -35,11 +35,13 @@ router.route('/').get(getItems)
 router.route('/available').get(getItemsAvailable)
 router.route('/reviews/:id').post(protect, createItemReview)
 
-router.route('/:id').get(getItemsById).delete(protect, admin, deleteItem).put(protect, admin, updateItem)
-// router.route("/create").post(addItem);
+router
+  .route('/:id')
+  .get(getItemsById)
+  .delete(protect, admin, deleteItem)
+  .put(protect, admin, updateItem)
 router.route('/create').post(protect, upload.single('image'), addItem)
 
-//might need to add protect?
 router.route('/delete/:id').delete(protect, deleteItemsById)
 router.route('/updateitem/:id').put(protect, updateItem)
 

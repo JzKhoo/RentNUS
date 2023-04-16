@@ -26,19 +26,19 @@ import {
 import { logout } from './userActions'
 
 export const listItemsAvailable =
-  (keyword = "", pageNumber = "") =>
+  (keyword = '', pageNumber = '') =>
   async (dispatch) => {
     try {
-      dispatch({ type: ITEM_LIST_REQUEST });
+      dispatch({ type: ITEM_LIST_REQUEST })
 
       const { data } = await axios.get(
         `/api/items/available?keyword=${keyword}&pageNumber=${pageNumber}`
-      );
+      )
 
       dispatch({
         type: ITEM_LIST_SUCCESS,
         payload: data,
-      });
+      })
     } catch (error) {
       dispatch({
         type: ITEM_LIST_FAIL,
@@ -46,12 +46,12 @@ export const listItemsAvailable =
           error.response && error.response.data.message
             ? error.response.data.message
             : error.message,
-      });
+      })
     }
-  };
+  }
 
-  export const listItems =
-  (keyword = "", pageNumber = "") =>
+export const listItems =
+  (keyword = '', pageNumber = '') =>
   async (dispatch) => {
     try {
       dispatch({ type: ITEM_LIST_REQUEST })
@@ -164,21 +164,12 @@ export const deleteItem = (id) => async (dispatch, getState) => {
     var config = {
       method: 'delete',
       url: `/api/items/delete/${id}`,
-      headers: { 
+      headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${userInfo.token}`,
-      }
-    };
+      },
+    }
     await axios(config)
-
-
-    // const config = {
-    //   headers: {
-    //     Authorization: `Bearer ${userInfo.token}`,
-    //   },
-    // }
-
-    // await axios.delete(`/api/items/${id}`, config)
 
     dispatch({
       type: ITEM_DELETE_SUCCESS,
@@ -196,49 +187,39 @@ export const deleteItem = (id) => async (dispatch, getState) => {
 
 export const updateItem = (itemId, formData) => async (dispatch, getState) => {
   try {
-    dispatch({ 
-      type: ITEM_UPDATE_REQUEST
+    dispatch({
+      type: ITEM_UPDATE_REQUEST,
     })
 
     const {
       userLogin: { userInfo },
     } = getState()
 
-    // const config = {
-    //   headers: {
-    //     'Content-Type': 'application.json',
-    //     Authorization: `Bearer ${userInfo.token}`,
-    //   },
-    // }
-
-    // const { data } = await axios.put(`/api/items/${itemId}`, formData, config)
-
     var dataInput = JSON.stringify({
-      "name": formData.get("name"),
-      "brand": formData.get("brand"),
-      "category": formData.get("category"),
-      "description": formData.get("description"),
-      "pricePerDay": formData.get("pricePerDay"),
-      "startDate": formData.get("startDate"),
-      "endDate": formData.get("endDate")
+      name: formData.get('name'),
+      brand: formData.get('brand'),
+      category: formData.get('category'),
+      description: formData.get('description'),
+      pricePerDay: formData.get('pricePerDay'),
+      startDate: formData.get('startDate'),
+      endDate: formData.get('endDate'),
+    })
 
-    });
+    console.log('form data:' + formData.get('name'))
 
-    console.log("form data:" + formData.get("name"))
-    
     var config = {
       method: 'put',
       url: `/api/items/updateitem/${itemId}`,
-      headers: { 
+      headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${userInfo.token}`,
       },
-      data : dataInput
-    };
+      data: dataInput,
+    }
     const { data } = axios(config)
 
     dispatch({ type: ITEM_UPDATE_SUCCESS })
-    
+
     dispatch({ type: ITEM_DETAILS_SUCCESS, payload: data })
   } catch (error) {
     dispatch({
@@ -261,15 +242,6 @@ export const createItemReview =
       const {
         userLogin: { userInfo },
       } = getState()
-
-      // const config = {
-      //   headers: {
-      //     'Content-Type': 'application.json',
-      //     Authorization: `Bearer ${userInfo.token}`,
-      //   },
-      // }
-
-      // await axios.post(`/api/items/${itemId}/reviews`, review, config)
 
       var dataInput = JSON.stringify({
         rating: rating,

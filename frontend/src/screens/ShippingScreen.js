@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'
 import { Form, Button } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import FormContainer from '../components/FormContainer'
@@ -11,8 +11,7 @@ const ShippingScreen = ({ history }) => {
   const cart = useSelector((state) => state.cart)
   const { shippingAddress } = cart // get the shipping address from the initial state and then store in cart
 
-
-  const [address, setAddress] = useState(shippingAddress.address) // get state 
+  const [address, setAddress] = useState(shippingAddress.address) // get state
   const [city, setCity] = useState(shippingAddress.city)
   const [postalCode, setPostalCode] = useState(shippingAddress.postalCode)
   const [country, setCountry] = useState(shippingAddress.country)
@@ -21,14 +20,14 @@ const ShippingScreen = ({ history }) => {
 
   const submitHandler = (e) => {
     e.preventDefault()
-    dispatch(saveShippingAddress({ address, city, postalCode, country })) // params is data 
-    navigate('/payment'); // instead of history, use navigate
+    dispatch(saveShippingAddress({ address, city, postalCode, country })) // params is data
+    navigate('/payment') // instead of history, use navigate
   }
-  <CheckoutSteps step1 step2 />
+  ;<CheckoutSteps step1 step2 />
 
   return (
     <FormContainer>
-        <CheckoutSteps step1 step2 />
+      <CheckoutSteps step1 step2 />
       <h1>Shipping</h1>
       <Form onSubmit={submitHandler}>
         <Form.Group controlId='address'>

@@ -87,7 +87,7 @@ export const itemAddReducer = (state = {}, action) => {
   }
 }
 
-export const itemDeleteReducer = (state = { }, action) => {
+export const itemDeleteReducer = (state = {}, action) => {
   switch (action.type) {
     case ITEM_DELETE_REQUEST:
       return { loading: true }
@@ -115,7 +115,7 @@ export const itemUpdateReducer = (state = { item: {} }, action) => {
   }
 }
 
-export const itemReviewCreateReducer = (state = { }, action) => {
+export const itemReviewCreateReducer = (state = {}, action) => {
   switch (action.type) {
     case ITEM_CREATE_REVIEW_REQUEST:
       return { loading: true }
