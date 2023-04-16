@@ -13,6 +13,10 @@ A web application item rental/renting service catered towards NUS Students, to a
 - _Database & Management_: Atlas CloudDB & Mongoose
 - _Deployment_: Vercel MERN deployment
 
+## Repo Link
+
+https://github.com/JzKhoo/RentNUS
+
 ## Installation
 
 1. `npm install` in the root & frontend directory
@@ -38,14 +42,14 @@ A web application item rental/renting service catered towards NUS Students, to a
 - Toggle to Next Page
 - Search Items
 - View Item Details
-- Go back to Previous Page
 
 ### Item Management
 
 - Add an Item
 - Delete an Item
 - Update Item
-- Add a Review
+- Create item reviews
+- View item reviews
 
 ### Transaction Component
 
