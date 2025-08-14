@@ -37,10 +37,10 @@
     "path": "^0.12.7",
     "react-datepicker": "^4.11.0",
     "react-dropzone": "^14.2.3",
-    "react-redux": "^8.0.5",
+    "react-redux": "^9.2.0",
     "redux": "^4.2.1",
     "redux-devtools-extension": "^2.13.9",
-    "redux-thunk": "^2.4.2"
+    "redux-thunk": "^3.1.0"
   },
   "devDependencies": {
     "concurrently": "^9.2.0",
