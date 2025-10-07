@@ -28,7 +28,7 @@
     "axios": "^1.12.2",
     "bcryptjs": "^3.0.2",
     "colors": "^1.4.0",
-    "dotenv": "^17.2.2",
+    "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "express-async-handler": "^1.2.0",
     "jsonwebtoken": "^9.0.2",
