@@ -35,6 +35,7 @@ const __dirname = path.resolve()
 app.use('uploads/', express.static(path.join(__dirname, 'uploads/')))
 
 if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1)
   app.use(express.static(path.join(__dirname, '/frontend/build')))
   app.get('*', staticFileLimiter, (req, res) =>
     res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'))
