@@ -7,12 +7,18 @@ import userRoutes from './routes/userRoutes.js'
 import itemRoutes from './routes/itemRoutes.js'
 import orderRoutes from './routes/orderRoutes.js'
 import { notFound, errorHandler } from './middleware/errorMiddleware.js'
+import rateLimit from 'express-rate-limit'
 
 dotenv.config()
 
 connectDB()
 
 const app = express()
+
+const staticFileLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 1000, // limit each IP to 1000 requests per windowMs for static file route
+})
 
 app.use(express.json())
 
@@ -30,7 +36,7 @@ app.use('uploads/', express.static(path.join(__dirname, 'uploads/')))
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '/frontend/build')))
-  app.get('*', (req, res) =>
+  app.get('*', staticFileLimiter, (req, res) =>
     res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'))
   )
   // res.sendFile(path.join(__dirname, '../frontend/build/index.html')))
