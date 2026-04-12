@@ -8,7 +8,7 @@
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
     "ajv": "^8.18.0",
-    "axios": "^1.14.0",
+    "axios": "^1.15.0",
     "moment": "^2.29.4",
     "multer": "^2.1.1",
     "path": "^0.12.7",
