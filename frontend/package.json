@@ -15,7 +15,7 @@
     "react": "^19.2.5",
     "react-bootstrap": "^2.10.10",
     "react-datepicker": "^4.11.0",
-    "react-dom": "^19.2.4",
+    "react-dom": "^19.2.5",
     "react-dropzone": "^14.2.3",
     "react-paypal-button-v2": "^2.6.3",
     "react-redux": "^8.0.5",
