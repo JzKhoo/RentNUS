@@ -12,7 +12,7 @@
     "moment": "^2.31.0",
     "multer": "^2.5.0",
     "path": "^0.12.7",
-    "react": "^19.3.0",
+    "react": "^19.3.1",
     "react-bootstrap": "^2.10.10",
     "react-datepicker": "^9.1.0",
     "react-dom": "^19.3.0",
